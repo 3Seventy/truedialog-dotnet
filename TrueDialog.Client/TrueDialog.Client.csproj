@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54BC8582-2E1B-41E9-ABD5-9F35D6AD9FE3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TrueDialog</RootNamespace>
+    <AssemblyName>TrueDialog.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net451\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Builders\Implementation\SMSBuilder.cs" />
+    <Compile Include="Builders\Interface\ISMSBuilder.cs" />
+    <Compile Include="Client\Client.cs" />
+    <Compile Include="Client\Context\Account\AccountAttributeContext.cs" />
+    <Compile Include="Client\Context\Account\AccountAttributeDefinitionContext.cs" />
+    <Compile Include="Client\Context\Account\AccountContext.cs" />
+    <Compile Include="Client\Context\Account\AccountMediaContext.cs" />
+    <Compile Include="Client\Context\Account\ApiKeyContext.cs" />
+    <Compile Include="Client\Context\Action\ImportContext.cs" />
+    <Compile Include="Client\Context\Action\ScheduleContext.cs" />
+    <Compile Include="Client\Context\BaseContext.cs" />
+    <Compile Include="Client\Context\Callback\CallbackContext.cs" />
+    <Compile Include="Client\Context\Campaign\CampaignAnswerContext.cs" />
+    <Compile Include="Client\Context\Campaign\CampaignContext.cs" />
+    <Compile Include="Client\Context\Campaign\CampaignQuestionContext.cs" />
+    <Compile Include="Client\Context\Campaign\CampaignSurveyContext.cs" />
+    <Compile Include="Client\Context\Campaign\CouponDefinitionContext.cs" />
+    <Compile Include="Client\Context\Report\CampaignReportContext.cs" />
+    <Compile Include="Client\Context\Report\MessageReportContext.cs" />
+    <Compile Include="Client\Context\Report\ReportContext.cs" />
+    <Compile Include="Model\Campaign\CouponOffer.cs" />
+    <Compile Include="Client\Context\Campaign\CouponOfferContext.cs" />
+    <Compile Include="Client\Context\Campaign\ExternalCouponCodeContext.cs" />
+    <Compile Include="Client\Context\Campaign\ExternalCouponListContext.cs" />
+    <Compile Include="Client\Context\Campaign\LinkContext.cs" />
+    <Compile Include="Client\Context\Channel\ChannelContext.cs" />
+    <Compile Include="Client\Context\Channel\LongCodeContext.cs" />
+    <Compile Include="Client\Context\ContactList\ContactFilterContext.cs" />
+    <Compile Include="Client\Context\ContactList\ContactListContext.cs" />
+    <Compile Include="Client\Context\ContactList\FilterGroupContext.cs" />
+    <Compile Include="Client\Context\Contact\ContactAttributeContext.cs" />
+    <Compile Include="Client\Context\Contact\ContactAttributeDefinitionContext.cs" />
+    <Compile Include="Client\Context\Contact\ContactContext.cs" />
+    <Compile Include="Client\Context\Contact\ContactSubscriptionContext.cs" />
+    <Compile Include="Client\Context\Content\ContentContext.cs" />
+    <Compile Include="Client\Context\Content\ContentTemplateContext.cs" />
+    <Compile Include="Client\Context\Keyword\KeywordContext.cs" />
+    <Compile Include="Client\Context\Message\MessageContext.cs" />
+    <Compile Include="Client\Context\Subscription\SubscriptionContext.cs" />
+    <Compile Include="Client\Context\User\UserContext.cs" />
+    <Compile Include="Client\InternalClient.cs" />
+    <Compile Include="Client\TrueDialogClient.cs" />
+    <Compile Include="Configuration\AppConfig\RetryStrategyElement.cs" />
+    <Compile Include="Configuration\AppConfig\TrueDialogAuthElement.cs" />
+    <Compile Include="Configuration\AppConfig\TrueDialogConfigSection.cs" />
+    <Compile Include="Configuration\Contracts\IAuthConfig.cs" />
+    <Compile Include="Configuration\Contracts\IConfiguration.cs" />
+    <Compile Include="Configuration\Contracts\IRetryConfig.cs" />
+    <Compile Include="Enums\ActionType.cs" />
+    <Compile Include="Enums\ApiKeyType.cs" />
+    <Compile Include="Enums\CallbackType.cs" />
+    <Compile Include="Enums\CampaignType.cs" />
+    <Compile Include="Enums\ChannelType.cs" />
+    <Compile Include="Enums\CouponStatus.cs" />
+    <Compile Include="Enums\CouponType.cs" />
+    <Compile Include="Enums\DataType.cs" />
+    <Compile Include="Enums\EncodingType.cs" />
+    <Compile Include="Enums\ErrorCode.cs" />
+    <Compile Include="Enums\FilterType.cs" />
+    <Compile Include="Enums\LanguageType.cs" />
+    <Compile Include="Enums\LinkType.cs" />
+    <Compile Include="Enums\MappingType.cs" />
+    <Compile Include="Enums\MediaType.cs" />
+    <Compile Include="Enums\Operand.cs" />
+    <Compile Include="Enums\OperationType.cs" />
+    <Compile Include="Enums\ProcessStatus.cs" />
+    <Compile Include="Enums\QuestionType.cs" />
+    <Compile Include="Enums\ResourceStatus.cs" />
+    <Compile Include="Enums\ScheduleType.cs" />
+    <Compile Include="Enums\SubscriptionType.cs" />
+    <Compile Include="Enums\ValidDateType.cs" />
+    <Compile Include="Exceptions\NetworkException.cs" />
+    <Compile Include="Exceptions\RemoteException.cs" />
+    <Compile Include="Helpers\NewtonsoftSerializer.cs" />
+    <Compile Include="Helpers\ObjectHelper.cs" />
+    <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Model\Account\Account.cs" />
+    <Compile Include="Model\Account\AccountAttribute.cs" />
+    <Compile Include="Model\Account\AccountAttributeCategory.cs" />
+    <Compile Include="Model\Account\AccountAttributeDefinition.cs" />
+    <Compile Include="Model\Account\AccountMedia.cs" />
+    <Compile Include="Model\Action\Action.cs" />
+    <Compile Include="Model\Action\ActionExecute.cs" />
+    <Compile Include="Model\Action\ActionImportContacts.cs" />
+    <Compile Include="Model\Action\ActionPushCampaign.cs" />
+    <Compile Include="Model\Action\ActionSchedule.cs" />
+    <Compile Include="Model\Callback\Callback.cs" />
+    <Compile Include="Model\Callback\Contracts\BaseCallbackEvent.cs" />
+    <Compile Include="Model\Callback\Contracts\DialogCallbackEvent.cs" />
+    <Compile Include="Model\Callback\Contracts\KeywordCallbackEvent.cs" />
+    <Compile Include="Model\Callback\Contracts\NewAccountCallbackEvent.cs" />
+    <Compile Include="Model\Callback\Contracts\StopCallbackEvent.cs" />
+    <Compile Include="Model\Campaign\Campaign.cs" />
+    <Compile Include="Model\Campaign\CampaignAnswer.cs" />
+    <Compile Include="Model\Campaign\CampaignQuestion.cs" />
+    <Compile Include="Model\Campaign\CampaignSurvey.cs" />
+    <Compile Include="Model\Campaign\CouponDefinition.cs" />
+    <Compile Include="Model\Campaign\CouponRedemptionDetails.cs" />
+    <Compile Include="Model\Campaign\ExternalCouponCode.cs" />
+    <Compile Include="Model\Campaign\ExternalCouponList.cs" />
+    <Compile Include="Model\Channel\Channel.cs" />
+    <Compile Include="Model\Channel\LongCode.cs" />
+    <Compile Include="Model\Contact\Contact.cs" />
+    <Compile Include="Model\Contact\ContactAttribute.cs" />
+    <Compile Include="Model\Contact\ContactAttributeCategory.cs" />
+    <Compile Include="Model\Contact\ContactAttributeDefinition.cs" />
+    <Compile Include="Model\Contact\ContactSubscription.cs" />
+    <Compile Include="Model\Content\Content.cs" />
+    <Compile Include="Model\Content\ContentTemplate.cs" />
+    <Compile Include="Model\Filter\ContactFilter.cs" />
+    <Compile Include="Model\Filter\ContactList.cs" />
+    <Compile Include="Model\Filter\FilterGroup.cs" />
+    <Compile Include="Model\Keyword\Keyword.cs" />
+    <Compile Include="Model\Campaign\Link.cs" />
+    <Compile Include="Model\Report\CampaignReportRow.cs" />
+    <Compile Include="Model\Report\MessageReportRow.cs" />
+    <Compile Include="Model\Subscription\Subscription.cs" />
+    <Compile Include="Model\Subscription\SubscriptionContact.cs" />
+    <Compile Include="Model\Account\ApiKey.cs" />
+    <Compile Include="Model\User\User.cs" />
+    <Compile Include="Model\User\UserPassword.cs" />
+    <Compile Include="Model\_base\ActionBase.cs" />
+    <Compile Include="Model\_base\Base.cs" />
+    <Compile Include="Model\_base\BaseAudited.cs" />
+    <Compile Include="Model\_base\BaseEvent.cs" />
+    <Compile Include="Model\_base\ErrorDetails.cs" />
+    <Compile Include="Model\_base\SoftDeletable.cs" />
+    <Compile Include="Model\_internal\CreateCampaign.cs" />
+    <Compile Include="Model\_internal\CreateLink.cs" />
+    <Compile Include="Model\_internal\CreateUpdateContent.cs" />
+    <Compile Include="Model\_internal\CreateUpdateContentTemplate.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retry\IRetryDetectionStrategy.cs" />
+    <Compile Include="Retry\IRetryPolicy.cs" />
+    <Compile Include="Retry\RestErrorDetectionStrategy.cs" />
+    <Compile Include="Retry\RetryPolicy.cs" />
+    <Compile Include="Retry\Strategy\ExponentialRetryStrategy.cs" />
+    <Compile Include="Retry\Strategy\FixedRetryStrategy.cs" />
+    <Compile Include="Retry\Strategy\IncrementalRetryStrategy.cs" />
+    <Compile Include="Retry\Strategy\RetryStrategy.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config.transform" />
+    <None Include="web.config.transform" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

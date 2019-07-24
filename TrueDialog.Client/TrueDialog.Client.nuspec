@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://www.truedialog.com/terms-and-conditions/</licenseUrl>
+    <projectUrl>https://api.truedialog.com/docs/v2.1/</projectUrl>
+    <iconUrl>https://www.truedialog.com/wp-content/uploads/2017/07/favicon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Fixes and improvements.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>TrueDialog Client SMS MMS Marketing</tags>
+  </metadata>
+  <files>
+    <file src="app.config.transform" target="content" />
+	<file src="web.config.transform" target="content" />
+  </files>
+</package>

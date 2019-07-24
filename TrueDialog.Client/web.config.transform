@@ -1,0 +1,30 @@
+﻿<configuration>
+  <configSections>
+    <section name="trueDialog" type="TrueDialog.Configuration.TrueDialogConfigSection, TrueDialog.Client" />
+  </configSections>
+  <trueDialog baseUrl="https://api.truedialog.com/api/v2.1/">
+    <!-- TODO: Fill in with your login information. -->
+    <auth username="" password="" defaultAccountId="" apiKey="" apiSecret="" />
+    <!-- Try up to 3 times once every 1 second-->
+    <retryPolicy
+        type="TrueDialog.Retry.Strategy.FixedRetryStrategy"
+        maxTries="3"
+        interval="0:0:1" />
+
+    <!-- Try up to 4 times retring after: .5, 1, 1.5 seconds. -->
+    <!--
+        <retryPolicy
+            type="ThreeSeventy.Vector.Client.IncrementalRetryStrategy"
+            maxTries="4"
+            interval="0:0:0.5" />
+        -->
+
+    <!-- Try up to 5 times retring after: .5, 1, 2, 4 seconds -->
+    <!--
+        <retryPolicy
+            type="ThreeSeventy.Vector.Client.ExponentialRetryStrategy"
+            maxTries="5"
+            interval="0:0:0.5" />
+        -->
+  </trueDialog>
+</configuration>
