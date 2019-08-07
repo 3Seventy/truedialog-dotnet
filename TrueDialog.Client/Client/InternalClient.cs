@@ -28,7 +28,7 @@ namespace TrueDialog
         private HttpBasicAuthenticator m_apiAuthenticator;
         #endregion
 
-        public InternalClient(int accountId = 0)
+        public InternalClient(int accountId = 0, string username = null, string password = null)
         {
             Config = TrueDialogConfigSection.GetConfig();
             AccountId = accountId;
@@ -42,7 +42,7 @@ namespace TrueDialog
             var strategy = GetRetryStrategy();
             RetryPolicy = new RetryPolicy<RestErrorDetectionStrategy>(strategy);
 
-            RestClient = CreateClient(Config);
+            RestClient = CreateClient(Config, username, password);
         }
 
         #region Account ID Management
@@ -87,18 +87,18 @@ namespace TrueDialog
         /// <summary>
         /// Returns a new RestClient() object.
         /// </summary>
-        private IRestClient CreateClient(IConfiguration config)
+        private IRestClient CreateClient(IConfiguration config, string username, string password)
         {
             Assembly thisAssembly = Assembly.GetCallingAssembly();
             AssemblyName asmName = thisAssembly.GetName();
             var version = asmName.Version.ToString();
 
-            string userName = config.Authorization.UserName;
-            string password = config.Authorization.Password;
-            m_userAuthenticator = new HttpBasicAuthenticator(userName, password);
+            string user = username ?? config.Authorization.UserName;
+            string pass = password ?? config.Authorization.Password;
+            m_userAuthenticator = new HttpBasicAuthenticator(user, pass);
 
-            string apiKey = string.IsNullOrEmpty(config.Authorization.ApiKey) ? config.Authorization.UserName : config.Authorization.ApiKey;
-            string apiSecret = string.IsNullOrEmpty(config.Authorization.ApiSecret) ? config.Authorization.Password : config.Authorization.ApiSecret;
+            string apiKey = string.IsNullOrEmpty(config.Authorization.ApiKey) ? user : config.Authorization.ApiKey;
+            string apiSecret = string.IsNullOrEmpty(config.Authorization.ApiSecret) ? pass : config.Authorization.ApiSecret;
             m_apiAuthenticator = new HttpBasicAuthenticator(apiKey, apiSecret);
 
             string userAgent = config.UserAgent;

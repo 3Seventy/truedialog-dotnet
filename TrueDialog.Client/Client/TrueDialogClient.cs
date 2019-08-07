@@ -18,6 +18,11 @@ namespace TrueDialog
             InternalClient = new InternalClient(accountId);
         }
 
+        public TrueDialogClient(int accountId, string username, string password)
+        {
+            InternalClient = new InternalClient(accountId, username, password);
+        }
+
         #region Private members
         public void SetAccountId(int accountId)
         {
