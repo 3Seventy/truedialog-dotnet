@@ -44,7 +44,23 @@ namespace TrueDialog.Model
         [DataMember]
         public string Email { get; set; }
 
-        // TODO: Add subscription info
+        /// <summary>
+        /// Assigned account ID
+        /// </summary>
+        [DataMember]
+        public int? AssignedId { get; set; }
+
+        /// <summary>
+        /// Contact's first name
+        /// </summary>
+        [DataMember]
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Contact's last name
+        /// </summary>
+        [DataMember]
+        public string LastName { get; set; }
 
         /// <summary>
         /// List of attributes set on this contact

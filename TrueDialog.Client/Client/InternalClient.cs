@@ -22,19 +22,33 @@ namespace TrueDialog
     {
         #region Private Members
         private IRestClient RestClient;
-        private TrueDialogConfigSection Config { get; set; }
+        private IConfiguration Config { get; set; }
         private IRetryPolicy RetryPolicy { get; set; }
         private HttpBasicAuthenticator m_userAuthenticator;
         private HttpBasicAuthenticator m_apiAuthenticator;
         #endregion
 
-        public InternalClient(int accountId = 0, string username = null, string password = null)
+        public InternalClient(IConfiguration configuration = null, int accountId = 0, string username = null, string password = null, bool throwOnAccountMissing = true)
         {
-            Config = TrueDialogConfigSection.GetConfig();
+            Config = configuration ?? TrueDialogConfigSection.GetConfig();
             AccountId = accountId;
 
             if (AccountId == 0)
                 AccountId = Config.Authorization.AccountId;
+
+            if (AccountId == 0 && throwOnAccountMissing)
+                throw new ArgumentException("Account ID is missing.");
+
+            var strategy = GetRetryStrategy();
+            RetryPolicy = new RetryPolicy<RestErrorDetectionStrategy>(strategy);
+
+            RestClient = CreateClient(Config, username, password);
+        }
+
+        public InternalClient(IConfiguration configuration, IAuthConfig authConfig)
+        {
+            Config = configuration ?? TrueDialogConfigSection.GetConfig();
+            AccountId = authConfig.AccountId;
 
             if (AccountId == 0)
                 throw new ArgumentException("Account ID is missing.");
@@ -42,7 +56,7 @@ namespace TrueDialog
             var strategy = GetRetryStrategy();
             RetryPolicy = new RetryPolicy<RestErrorDetectionStrategy>(strategy);
 
-            RestClient = CreateClient(Config, username, password);
+            RestClient = CreateClient(Config, authConfig);
         }
 
         #region Account ID Management
@@ -115,11 +129,48 @@ namespace TrueDialog
             };
 
             rval.ClearHandlers();
-            rval.AddHandler("application/json", new NewtonsoftSerializer());
-            rval.AddHandler("text/json", new NewtonsoftSerializer());
+            rval.AddHandler("application/json", () => { return new NewtonsoftSerializer(); });
+            rval.AddHandler("text/json", () => { return new NewtonsoftSerializer(); });
 
-            rval.AddHandler("application/xml", new XmlDeserializer());
-            rval.AddHandler("text/xml", new XmlDeserializer());
+            rval.AddHandler("application/xml", () => { return new XmlDeserializer(); });
+            rval.AddHandler("text/xml", () => { return new XmlDeserializer(); });
+
+            return rval;
+        }
+
+        private IRestClient CreateClient(IConfiguration config, IAuthConfig authConfig)
+        {
+            Assembly thisAssembly = Assembly.GetCallingAssembly();
+            AssemblyName asmName = thisAssembly.GetName();
+            var version = asmName.Version.ToString();
+
+            string user = authConfig.UserName;
+            string pass = authConfig.Password;
+            m_userAuthenticator = new HttpBasicAuthenticator(user, pass);
+
+            string apiKey = string.IsNullOrEmpty(authConfig.ApiKey) ? user : authConfig.ApiKey;
+            string apiSecret = string.IsNullOrEmpty(authConfig.ApiSecret) ? pass : authConfig.ApiSecret;
+            m_apiAuthenticator = new HttpBasicAuthenticator(apiKey, apiSecret);
+
+            string userAgent = config.UserAgent;
+
+            if (String.IsNullOrWhiteSpace(userAgent))
+                userAgent = String.Format("TrueDialog SDK.NET {0}", version);
+
+            var rval = new RestClient
+            {
+                Authenticator = m_apiAuthenticator,
+                BaseUrl = new Uri(config.BaseUrl),
+                UserAgent = userAgent,
+                Timeout = (int)config.Timeout.TotalMilliseconds
+            };
+
+            rval.ClearHandlers();
+            rval.AddHandler("application/json", () => { return new NewtonsoftSerializer(); });
+            rval.AddHandler("text/json", () => { return new NewtonsoftSerializer(); });
+
+            rval.AddHandler("application/xml", () => { return new XmlDeserializer(); });
+            rval.AddHandler("text/xml", () => { return new XmlDeserializer(); });
 
             return rval;
         }
@@ -275,7 +326,7 @@ namespace TrueDialog
             };
 
             if (requestBody != null)
-                request.AddBody(requestBody);
+                request.AddJsonBody(requestBody);
 
             if (extraHeaders != null)
             {

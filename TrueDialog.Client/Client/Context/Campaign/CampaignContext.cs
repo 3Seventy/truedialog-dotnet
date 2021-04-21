@@ -2,8 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
-using TrueDialog.Helpers;
+using System.Linq;
 using TrueDialog.Model;
 
 namespace TrueDialog.Context
@@ -23,6 +22,24 @@ namespace TrueDialog.Context
 
         private const string LIST = "/account/{accountId}/campaign?onlyMine={onlyMine}";
         private const string ITEM = "/account/{accountId}/campaign/{campaignId}";
+
+        public Campaign GetDefault(CampaignType type)
+        {
+            return GetDefault(CurrentAccount, type);
+        }
+
+        public Campaign GetDefault(int accountId, CampaignType type)
+        {
+            var filter = string.Format("$filter=(IsDefault eq true) and (CampaignTypeId eq {0})", (int)type);
+            var request = TDClient.BuildRequest(Method.GET, LIST, new { accountId, onlyMine = true }, filter: filter);
+            var response = TDClient.InnerExecute(request);
+
+            var rval = TDClient.ProcessListResponse<Campaign>(request, response, false);
+            if (rval == null)
+                return null;
+            else
+                return rval.FirstOrDefault();
+        }
 
         public List<Campaign> GetList(int accountId, bool onlyMine = true, bool throwIfEmpty = false)
         {

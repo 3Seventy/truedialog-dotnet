@@ -14,6 +14,13 @@ namespace TrueDialog.Context
         private const string ITEM = "/account/{accountId}/user/{username}";
         private const string LOCK = "/account/{accountId}/user/{username}/lock";
         private const string RESET = "/account/{accountId}/user/{username}/password";
+        private const string USERINFO = "/userinfo";
+
+        public User GetSelf()
+        {
+            var rval = TDClient.GetItem<User>(USERINFO, null);
+            return rval;
+        }
 
         public List<User> GetList(int accountId, bool throwIfEmpty = false)
         {

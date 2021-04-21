@@ -34,5 +34,10 @@
         /// Reserved, do not use.
         /// </summary>
         Sweapstakes = 5,
+
+        /// <summary>
+        /// Chat campaign
+        /// </summary>
+        Chat = 6
     }
 }

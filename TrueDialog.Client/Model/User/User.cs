@@ -22,7 +22,7 @@ namespace TrueDialog.Model
         /// Confirmation password, must match Password.
         /// </summary>
         [DataMember]
-        internal string PasswordConfirmation { get; set; }
+        public string PasswordConfirmation { get; set; }
 
         /// <summary>
         /// The account this user is allowed to access.
@@ -53,6 +53,27 @@ namespace TrueDialog.Model
         /// </summary>
         [DataMember]
         public string PhoneNumber { get; set; }
+
+        /// <summary>
+        /// User is as chat agent
+        /// </summary>
+        /// <remarks>
+        /// Chat agent has access to Call Center only.
+        /// </remarks>
+        [DataMember]
+        public bool IsChatUser { get; set; }
+
+        /// <summary>
+        /// User is as report agent
+        /// </summary>
+        [DataMember]
+        public bool ReportOnly { get; set; }
+
+        /// <summary>
+        /// User can create contact
+        /// </summary>
+        [DataMember]
+        public bool CanCreateContact { get; set; }
 
         /// <summary> 
         /// Gets or sets application-specific information for the membership user. 

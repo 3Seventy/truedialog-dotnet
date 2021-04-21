@@ -13,14 +13,19 @@ namespace TrueDialog
             InternalClient = new InternalClient();
         }
 
+        internal TrueDialogClient(InternalClient internalClient)
+        {
+            InternalClient = internalClient;
+        }
+
         public TrueDialogClient(int accountId)
         {
-            InternalClient = new InternalClient(accountId);
+            InternalClient = new InternalClient(null, accountId);
         }
 
         public TrueDialogClient(int accountId, string username, string password)
         {
-            InternalClient = new InternalClient(accountId, username, password);
+            InternalClient = new InternalClient(null, accountId, username, password);
         }
 
         #region Private members
@@ -73,6 +78,8 @@ namespace TrueDialog
         public CampaignContext Campaign { get { return GetContext<CampaignContext>(); } }
 
         public ChannelContext Channel { get { return GetContext<ChannelContext>(); } }
+
+        public ChatContext Chat { get { return GetContext<ChatContext>(); } }
 
         public ContactContext Contact { get { return GetContext<ContactContext>(); } }
 

@@ -39,8 +39,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=106.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.10.1\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -73,9 +73,14 @@
     <Compile Include="Client\Context\Campaign\CampaignQuestionContext.cs" />
     <Compile Include="Client\Context\Campaign\CampaignSurveyContext.cs" />
     <Compile Include="Client\Context\Campaign\CouponDefinitionContext.cs" />
+    <Compile Include="Client\Context\Chat\ChatContext.cs" />
     <Compile Include="Client\Context\Report\CampaignReportContext.cs" />
     <Compile Include="Client\Context\Report\MessageReportContext.cs" />
     <Compile Include="Client\Context\Report\ReportContext.cs" />
+    <Compile Include="Configuration\Config\TrueDialogRetry.cs" />
+    <Compile Include="Configuration\Config\TrueDialogAuth.cs" />
+    <Compile Include="Configuration\Config\TrueDialogConfig.cs" />
+    <Compile Include="Model\Account\MediaContent.cs" />
     <Compile Include="Model\Campaign\CouponOffer.cs" />
     <Compile Include="Client\Context\Campaign\CouponOfferContext.cs" />
     <Compile Include="Client\Context\Campaign\ExternalCouponCodeContext.cs" />
@@ -158,6 +163,12 @@
     <Compile Include="Model\Campaign\ExternalCouponList.cs" />
     <Compile Include="Model\Channel\Channel.cs" />
     <Compile Include="Model\Channel\LongCode.cs" />
+    <Compile Include="Model\Chat\ChatConfig.cs" />
+    <Compile Include="Model\Chat\ChatConversation.cs" />
+    <Compile Include="Model\Chat\ChatMessage.cs" />
+    <Compile Include="Model\Chat\ChatToken.cs" />
+    <Compile Include="Model\Chat\ContactLookupOptions.cs" />
+    <Compile Include="Model\Chat\ContactLookupRow.cs" />
     <Compile Include="Model\Contact\Contact.cs" />
     <Compile Include="Model\Contact\ContactAttribute.cs" />
     <Compile Include="Model\Contact\ContactAttributeCategory.cs" />
@@ -176,6 +187,7 @@
     <Compile Include="Model\Subscription\SubscriptionContact.cs" />
     <Compile Include="Model\Account\ApiKey.cs" />
     <Compile Include="Model\User\User.cs" />
+    <Compile Include="Model\User\UserInfo.cs" />
     <Compile Include="Model\User\UserPassword.cs" />
     <Compile Include="Model\_base\ActionBase.cs" />
     <Compile Include="Model\_base\Base.cs" />

@@ -15,7 +15,7 @@ namespace TrueDialog.Context
         }
 
         private const string LIST = "account/{accountId}/long-code/";
-        private const string DIRECT_LIST = "account/{accountId}/long-code-direct/";
+        private const string DIRECT_LIST = "account/{accountId}/long-code-direct?includeChildren={includeChildren}";
         private const string FORWARDING = "/account/{accountId}/long-code/{longCode}/callforwarding";
         private const string FORWARDING_VERIFICATION = "account/{accountId}/long-code/{longCode}/callforwardingverification";
 
@@ -50,15 +50,15 @@ namespace TrueDialog.Context
             return GetRawList(CurrentAccount, throwIfEmpty);
         }
 
-        public List<LongCode> GetList(int accountId, bool throwIfEmpty = false)
+        public List<LongCode> GetList(int accountId, bool includeChildren = false, bool throwIfEmpty = false)
         {
-            var rval = TDClient.GetList<LongCode>(DIRECT_LIST, new { accountId }, throwIfEmpty);
+            var rval = TDClient.GetList<LongCode>(DIRECT_LIST, new { accountId, includeChildren }, throwIfEmpty);
             return rval;
         }
         
-        public List<LongCode> GetList(bool throwIfEmpty = false)
+        public List<LongCode> GetList(bool includeChildren = false, bool throwIfEmpty = false)
         {
-            return GetList(CurrentAccount, throwIfEmpty);
+            return GetList(CurrentAccount, includeChildren, throwIfEmpty);
         }
 
         public LongCode AddForwarding(int accountId, string longCode, string forwardingNumber)

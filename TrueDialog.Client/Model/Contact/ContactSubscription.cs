@@ -29,26 +29,26 @@ namespace TrueDialog.Model
         /// Set if the contact wishes to receive SMS messages.
         /// </summary>
         [DataMember]
-        public bool SmsEnabled { get; set; }
+        public bool? SmsEnabled { get; set; }
 
         /// <summary>
         /// Set if the contact wishes to receive MMS messages.
         /// </summary>
         [DataMember]
         [Obsolete("Not implemented, do not use")]
-        public bool MmsEnabled { get; set; }
+        public bool? MmsEnabled { get; set; }
 
         /// <summary>
         /// Set if the contact wishes to receive email messages.
         /// </summary>
         [DataMember]
-        public bool EmailEnabled { get; set; }
+        public bool? EmailEnabled { get; set; }
 
         /// <summary>
         /// Set if the contact wishes to receive voice messages.
         /// </summary>
         [DataMember]
         [Obsolete("Not implemented, do not use")]
-        public bool VoiceEnabled { get; set; }
+        public bool? VoiceEnabled { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-using TrueDialog.Helpers;
 using TrueDialog.Model;
 
 namespace TrueDialog.Context
@@ -17,6 +16,19 @@ namespace TrueDialog.Context
 
         private const string LIST = "/account/{accountId}/image";
         private const string ITEM = "/account/{accountId}/image/{imageId}";
+        private const string MEDIA = "/media/{mediaId}";
+
+        public MediaContent GetMediaContent(string mediaId)
+        {
+            var request = TDClient.BuildRequest(Method.GET, MEDIA, new { mediaId });
+            IRestResponse response = TDClient.InnerExecute(request);
+
+            return new MediaContent
+            {
+                Content = response.RawBytes,
+                ContentType = response.ContentType
+            };
+        }
 
         public List<AccountMedia> GetList(int accountId, bool throwIfEmpty = false)
         {
@@ -38,6 +50,16 @@ namespace TrueDialog.Context
         public AccountMedia GetById(int imageId, bool throwIfEmpty = true)
         {
             return GetById(CurrentAccount, imageId, throwIfEmpty);
+        }
+
+        public AccountMedia UploadAsByteArray(MediaType type, byte[] byteArray)
+        {
+            return UploadAsByteArray(CurrentAccount, type, byteArray);
+        }
+
+        public AccountMedia UploadAsByteArray(string extension, byte[] byteArray)
+        {
+            return UploadAsByteArray(CurrentAccount, TypeFromExtension(extension), byteArray);
         }
 
         public AccountMedia UploadAsByteArray(int accountId, MediaType type, byte[] byteArray)
@@ -114,6 +136,22 @@ namespace TrueDialog.Context
             }
 
             return string.Empty;
+        }
+
+        private MediaType TypeFromExtension(string extension)
+        {
+            switch(extension)
+            {
+                case ".gif":
+                    return MediaType.ImageGif;
+                case ".png":
+                    return MediaType.ImagePng;
+                case ".jpg":
+                case ".jpeg":
+                    return MediaType.ImageJpg;
+                default:
+                    throw new ArgumentException(String.Format("{0} is not supported extension.", extension));
+            }
         }
 
         public void Delete(int accountId, int imageId)
