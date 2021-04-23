@@ -16,25 +16,59 @@ namespace TrueDialog
 {
     internal class ApiCaller : IApiCaller
     {
-        private readonly IConfiguration m_config;
+        private readonly ITrueDialogConfig m_config;
 
         private readonly string m_baseUrl;
 
+        private readonly string m_apiHeader;
         private readonly string m_authHeader;
 
-        public ApiCaller(IConfiguration login = null)
-        {
-            m_config = login ?? TrueDialogConfigSection.GetConfig();
+        public int AccountId { get; set; }
 
-            if (!String.IsNullOrWhiteSpace(m_config.Authorization.UserName) && !String.IsNullOrWhiteSpace(m_config.Authorization.Password))
-                m_authHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{m_config.Authorization.UserName}:{m_config.Authorization.Password}"));
-            else
-                m_authHeader = String.Empty;
+        internal ApiCaller(ITrueDialogConfigProvider configFactory) 
+            : this(configFactory.GetConfig())
+        {
+        }
+
+        internal ApiCaller(ITrueDialogConfig config)
+        {
+            m_config = config ?? throw new ArgumentException("Config is required!");
+
+            m_config.BaseUrl = string.IsNullOrEmpty(m_config.BaseUrl) ? Defaults.BaseUrl : m_config.BaseUrl;
+            m_config.Timeout = m_config.Timeout.HasValue ? m_config.Timeout : Defaults.Timeout;
+            m_config.UserAgent = string.IsNullOrEmpty(m_config.UserAgent) ? Defaults.UserAgent : m_config.UserAgent;
 
             m_baseUrl = m_config.BaseUrl;
 
             if (!m_baseUrl.EndsWith("/"))
                 m_baseUrl += "/";
+
+            if (!String.IsNullOrWhiteSpace(m_config.Username) && !String.IsNullOrWhiteSpace(m_config.Password))
+                m_authHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{m_config.Username}:{m_config.Password}"));
+
+            if (!m_config.AccountId.HasValue)
+            {
+                if (!string.IsNullOrEmpty(m_authHeader))
+                {
+                    var userinfo = Get<Model.UserInfo>("userinfo", true);
+                    m_config.AccountId = userinfo.AccountId;
+                    m_config.ApiKey = userinfo.ApiKey.Key;
+                    m_config.ApiSecret = userinfo.ApiKey.Secret;
+                }
+                else if (!string.IsNullOrEmpty(m_config.ApiKey) && !string.IsNullOrEmpty(m_config.ApiSecret))
+                {
+                    throw new ArgumentException("Account ID must be provided with API key!");
+                }
+                else
+                {
+                    throw new ArgumentException("Login credentials required!");
+                }
+            }
+
+            if (!string.IsNullOrEmpty(m_config.ApiKey) && !string.IsNullOrEmpty(m_config.ApiSecret))
+                m_apiHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{m_config.ApiKey}:{m_config.ApiSecret}"));
+
+            AccountId = m_config.AccountId.Value;
         }
 
         private string AddQueryArgs(string url, string args) => (url.Contains("?") ? "&" : "?") + args;
@@ -87,9 +121,9 @@ namespace TrueDialog
                     req.Headers.Add(kvp.Key, kvp.Value.ToString());
             }
 
-            req.Timeout = (int)m_config.Timeout.TotalMilliseconds;
-            req.Headers.Add("Authorization", m_authHeader);
-            req.Headers.Add("Content-Type", "application/json");
+            req.Timeout = (int)m_config.Timeout;
+            req.ContentType = "application/json";
+            req.Headers.Add("Authorization", string.IsNullOrEmpty(m_apiHeader) ? m_authHeader : m_apiHeader);
             req.Method = method;
 
             return req;

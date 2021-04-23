@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class ImportContext : BaseContext, IImportContext
     {
-        internal ImportContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ImportContext(IApiCaller api) : base(api)
         {
         }
 

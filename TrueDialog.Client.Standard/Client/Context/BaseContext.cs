@@ -6,16 +6,14 @@ namespace TrueDialog.Context
 {
     internal class BaseContext
     {
-        protected readonly ITrueDialogClient Client;
         protected readonly IApiCaller Api;
 
-        public BaseContext(ITrueDialogClient client, IApiCaller api)
+        public BaseContext(IApiCaller api)
         {
-            Client = client;
             Api = api;
         }
 
-        protected int CurrentAccount { get { return Client.AccountId; } }
+        protected int CurrentAccount { get { return Api.AccountId; } }
 
         #region SubContext factory
         protected readonly ConcurrentDictionary<string, BaseContext> m_contextDictionary = new ConcurrentDictionary<string, BaseContext>();
@@ -32,8 +30,8 @@ namespace TrueDialog.Context
                 else
                 {
                     var constructor = typeof(TContext).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance,
-                        null, new Type[] { typeof(InternalClient) }, null);
-                    var context = (TContext)constructor.Invoke(new object[] { Client, Api });
+                        null, new Type[] { typeof(IApiCaller) }, null);
+                    var context = (TContext)constructor.Invoke(new object[] { Api });
 
                     m_contextDictionary[key] = context;
                     return context;

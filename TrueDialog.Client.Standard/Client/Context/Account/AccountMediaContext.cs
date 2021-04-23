@@ -8,7 +8,7 @@ namespace TrueDialog.Context
 {
     internal class AccountMediaContext : BaseContext, IAccountMediaContext
     {
-        internal AccountMediaContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal AccountMediaContext(IApiCaller api) : base(api)
         {
         }
 

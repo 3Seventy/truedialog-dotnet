@@ -2,7 +2,7 @@
 {
     internal class ReportContext : BaseContext, IReportContext
     {
-        internal ReportContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ReportContext(IApiCaller api) : base(api)
         {
         }
 

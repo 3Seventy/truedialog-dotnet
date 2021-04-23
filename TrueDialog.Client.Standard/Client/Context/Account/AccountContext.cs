@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class AccountContext : BaseContext, IAccountContext
     {
-        internal AccountContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal AccountContext(IApiCaller api) : base(api)
         {
         }
 
@@ -17,7 +17,7 @@ namespace TrueDialog.Context
 
         public Account GetById(int accountId, bool throwIfEmpty = false)
         {
-            return Api.Get<Account>($"/account/${accountId}", throwIfEmpty);
+            return Api.Get<Account>($"/account/{accountId}", throwIfEmpty);
         }
 
         public Account GetCurrentAccount()
@@ -41,12 +41,12 @@ namespace TrueDialog.Context
 
         public Account Update(Account account)
         {
-            return Api.Put($"/account/${account.Id}", account);
+            return Api.Put($"/account/{account.Id}", account);
         }
 
         public void Delete(int accountId)
         {
-            Api.Delete($"/account/${accountId}");
+            Api.Delete($"/account/{accountId}");
         }
 
         public void Delete(Account account)

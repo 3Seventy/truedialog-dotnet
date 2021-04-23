@@ -4,7 +4,7 @@ namespace TrueDialog.Context
 {
     internal class CampaignQuestionContext : BaseContext, ICampaignQuestionContext
     {
-        internal CampaignQuestionContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal CampaignQuestionContext(IApiCaller api) : base(api)
         {
         }
 

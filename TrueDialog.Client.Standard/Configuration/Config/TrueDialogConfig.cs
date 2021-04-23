@@ -1,37 +1,21 @@
-﻿using System;
-using System.Reflection;
-
-namespace TrueDialog.Configuration.Config
+﻿namespace TrueDialog.Configuration
 {
-    public class TrueDialogConfig
+    public class TrueDialogConfig : ITrueDialogConfig
     {
-        public IAuthConfig Authorization { get; set; }
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public string ApiKey { get; set; }
+
+        public string ApiSecret { get; set; }
+
+        public int? AccountId { get; set; }
 
         public string BaseUrl { get; set; }
 
         public string UserAgent { get; set; }
 
-        public TimeSpan Timeout { get; set; }
-
-        public IRetryConfig RetryPolicy { get; set; }
-
-        public static TrueDialogConfig Default
-        {
-            get
-            {
-                Assembly thisAssembly = Assembly.GetCallingAssembly();
-                AssemblyName asmName = thisAssembly.GetName();
-                var version = asmName.Version.ToString();
-
-                return new TrueDialogConfig
-                {
-                    BaseUrl = "https://api.truedialog.com/api/v2.1",
-                    UserAgent = String.Format("TrueDialog SDK.NET {0}", version),
-                    Timeout = TimeSpan.FromSeconds(20),
-                    RetryPolicy = TrueDialogRetry.Default,
-                    Authorization = TrueDialogAuth.Empty
-                };
-            }
-        }
+        public int? Timeout { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class CouponOfferContext : BaseContext, ICouponOfferContext
     {
-        internal CouponOfferContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal CouponOfferContext(IApiCaller api) : base(api)
         {
         }
 

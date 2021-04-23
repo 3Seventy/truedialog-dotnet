@@ -8,7 +8,7 @@ namespace TrueDialog.Context
 {
     internal class LongCodeContext : BaseContext, ILongCodeContext
     {
-        internal LongCodeContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal LongCodeContext(IApiCaller api) : base(api)
         {
         }
 

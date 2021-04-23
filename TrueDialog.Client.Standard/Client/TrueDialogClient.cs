@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Reflection;
 
 using TrueDialog.Configuration;
-using TrueDialog.Configuration.Config;
 using TrueDialog.Context;
 
 namespace TrueDialog
@@ -13,32 +12,21 @@ namespace TrueDialog
     {
         private readonly IApiCaller m_api;
 
-        public TrueDialogClient()
-        {
-            m_api = new ApiCaller();
-        }
-
         internal TrueDialogClient(IApiCaller api)
         {
             m_api = api;
         }
 
-        public TrueDialogClient(IConfiguration configuration)
+        public TrueDialogClient(ITrueDialogConfigProvider configFactory)
         {
-            m_api = new ApiCaller(configuration);
+            m_api = new ApiCaller(configFactory);
         }
 
-        public TrueDialogClient(int accountId, string username, string password)
-        {
-            AccountId = accountId;
-            m_api = new ApiCaller(new TrueDialogConfig { Authorization = new TrueDialogAuth { UserName = username, Password = password } });
-        }
-
-        public int AccountId { get; private set; }
+        public int AccountId { get { return m_api.AccountId; } }
 
         public void SetAccountId(int accountId)
         {
-            AccountId = accountId;
+            m_api.AccountId = accountId;
         }
 
         #region Contexts
@@ -57,7 +45,7 @@ namespace TrueDialog
                 else
                 {
                     var constructor = typeof(TContext).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance,
-                        null, new Type[] { typeof(ITrueDialogClient) }, null);
+                        null, new Type[] { typeof(IApiCaller) }, null);
                     var context = (TContext)constructor.Invoke(new object[] { m_api });
 
                     m_contextDictionary[key] = context;
@@ -66,37 +54,43 @@ namespace TrueDialog
             }
         }
 
-        public IAccountContext Account { get { return GetContext<AccountContext>(); } }
+        private void CheckAuthenticated()
+        {
+            if (m_api == null)
+                throw new Exception("Not authenticated!");
+        }
 
-        public IApiKeyContext ApiKey { get { return GetContext<ApiKeyContext>(); } }
+        public IAccountContext Account { get { CheckAuthenticated(); return GetContext<AccountContext>(); } }
 
-        public ICallbackContext Callback { get { return GetContext<CallbackContext>(); } }
+        public IApiKeyContext ApiKey { get { CheckAuthenticated(); return GetContext<ApiKeyContext>(); } }
 
-        public ICampaignContext Campaign { get { return GetContext<CampaignContext>(); } }
+        public ICallbackContext Callback { get { CheckAuthenticated(); return GetContext<CallbackContext>(); } }
 
-        public IChannelContext Channel { get { return GetContext<ChannelContext>(); } }
+        public ICampaignContext Campaign { get { CheckAuthenticated(); return GetContext<CampaignContext>(); } }
 
-        public IChatContext Chat { get { return GetContext<ChatContext>(); } }
+        public IChannelContext Channel { get { CheckAuthenticated(); return GetContext<ChannelContext>(); } }
 
-        public IContactContext Contact { get { return GetContext<ContactContext>(); } }
+        public IChatContext Chat { get { CheckAuthenticated(); return GetContext<ChatContext>(); } }
 
-        public IContactListContext ContactList { get { return GetContext<ContactListContext>(); } }
+        public IContactContext Contact { get { CheckAuthenticated(); return GetContext<ContactContext>(); } }
 
-        public IImportContext Import { get { return GetContext<ImportContext>(); } }
+        public IContactListContext ContactList { get { CheckAuthenticated(); return GetContext<ContactListContext>(); } }
 
-        public IKeywordContext Keyword { get { return GetContext<KeywordContext>(); } }
+        public IImportContext Import { get { CheckAuthenticated(); return GetContext<ImportContext>(); } }
 
-        public IAccountMediaContext Media { get { return GetContext<AccountMediaContext>(); } }
+        public IKeywordContext Keyword { get { CheckAuthenticated(); return GetContext<KeywordContext>(); } }
 
-        public IMessageContext Message { get { return GetContext<MessageContext>(); } }
+        public IAccountMediaContext Media { get { CheckAuthenticated(); return GetContext<AccountMediaContext>(); } }
 
-        public IReportContext Report { get { return GetContext<ReportContext>(); } }
+        public IMessageContext Message { get { CheckAuthenticated(); return GetContext<MessageContext>(); } }
 
-        public IScheduleContext Schedule { get { return GetContext<ScheduleContext>(); } }
+        public IReportContext Report { get { CheckAuthenticated(); return GetContext<ReportContext>(); } }
 
-        public ISubscriptionContext Subscription { get { return GetContext<SubscriptionContext>(); } }
+        public IScheduleContext Schedule { get { CheckAuthenticated(); return GetContext<ScheduleContext>(); } }
 
-        public IUserContext User { get { return GetContext<UserContext>(); } }
+        public ISubscriptionContext Subscription { get { CheckAuthenticated(); return GetContext<SubscriptionContext>(); } }
+
+        public IUserContext User { get { CheckAuthenticated(); return GetContext<UserContext>(); } }
 
         #endregion
     }

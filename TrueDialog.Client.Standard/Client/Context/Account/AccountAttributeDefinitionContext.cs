@@ -6,8 +6,8 @@ namespace TrueDialog.Context
 {
     internal class AccountAttributeDefinitionContext : BaseContext, IAccountAttributeDefinitionContext
     {
-        internal AccountAttributeDefinitionContext(ITrueDialogClient client, IApiCaller api)
-            : base(client, api)
+        internal AccountAttributeDefinitionContext(IApiCaller api)
+            : base(api)
         {
         }
 

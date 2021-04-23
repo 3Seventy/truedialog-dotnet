@@ -1,17 +1,14 @@
 ﻿namespace TrueDialog.Configuration
 {
-    /// <summary>
-    /// Details for user authentication
-    /// </summary>
     public interface IAuthConfig
     {
         /// <summary>
-        /// The user name to use.
+        /// The user name that should be sent.
         /// </summary>
         string UserName { get; set; }
 
         /// <summary>
-        /// The password to use.
+        /// The password that should be sent.
         /// </summary>
         string Password { get; set; }
 

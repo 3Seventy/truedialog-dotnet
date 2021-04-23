@@ -1,16 +1,10 @@
-﻿using TrueDialog.Model;
-
-namespace TrueDialog
+﻿namespace TrueDialog
 {
     public interface ITrueDialogClient
     {
         void SetAccountId(int accountId);
 
         int AccountId { get; }
-
-        void Authorize(string username, string password);
-
-        bool Authorize(string username, string password, out UserInfo user);
 
         #region Contexts
 

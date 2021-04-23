@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class ContactSubscriptionContext : BaseContext, IContactSubscriptionContext
     {
-        internal ContactSubscriptionContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ContactSubscriptionContext(IApiCaller api) : base(api)
         {
         }
 

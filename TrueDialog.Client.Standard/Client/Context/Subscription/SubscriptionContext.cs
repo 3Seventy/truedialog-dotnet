@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class SubscriptionContext : BaseContext, ISubscriptionContext
     {
-        internal SubscriptionContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal SubscriptionContext(IApiCaller api) : base(api)
         {
         }
 

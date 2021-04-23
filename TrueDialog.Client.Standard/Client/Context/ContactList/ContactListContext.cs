@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class ContactListContext : BaseContext, IContactListContext
     {
-        internal ContactListContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ContactListContext(IApiCaller api) : base(api)
         {
         }
 

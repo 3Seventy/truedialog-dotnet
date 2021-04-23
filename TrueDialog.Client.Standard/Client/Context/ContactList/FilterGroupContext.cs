@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class FilterGroupContext : BaseContext, IFilterGroupContext
     {
-        internal FilterGroupContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal FilterGroupContext(IApiCaller api) : base(api)
         {
         }
 

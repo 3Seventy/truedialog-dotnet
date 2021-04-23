@@ -8,7 +8,7 @@ namespace TrueDialog.Context
 {
     internal class MessageReportContext : BaseContext, IMessageReportContext
     {
-        internal MessageReportContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal MessageReportContext(IApiCaller api) : base(api)
         {
         }
 

@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class ScheduleContext : BaseContext, IScheduleContext
     {
-        internal ScheduleContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ScheduleContext(IApiCaller api) : base(api)
         {
         }
         

@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class ChannelContext : BaseContext, IChannelContext
     {
-        internal ChannelContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ChannelContext(IApiCaller api) : base(api)
         {
         }
 

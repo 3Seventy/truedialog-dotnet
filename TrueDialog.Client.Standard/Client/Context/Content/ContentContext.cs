@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class ContentContext : BaseContext, IContentContext
     {
-        internal ContentContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ContentContext(IApiCaller api) : base(api)
         {
         }
 

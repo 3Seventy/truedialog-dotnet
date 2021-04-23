@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class ApiKeyContext : BaseContext, IApiKeyContext
     {
-        internal ApiKeyContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ApiKeyContext(IApiCaller api) : base(api)
         {
         }
 

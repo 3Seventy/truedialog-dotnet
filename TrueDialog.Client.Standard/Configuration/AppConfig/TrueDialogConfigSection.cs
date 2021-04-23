@@ -3,16 +3,14 @@ using System.Configuration;
 
 namespace TrueDialog.Configuration
 {
-    public class TrueDialogConfigSection : ConfigurationSection, IConfiguration
+    public class TrueDialogConfigSection : ConfigurationSection
     {
         /// <summary>
         /// Pulls config from the configuration file.
         /// </summary>
         public static TrueDialogConfigSection GetConfig()
         {
-            var rval = (TrueDialogConfigSection)ConfigurationManager.GetSection("trueDialog");
-
-            return rval ?? new TrueDialogConfigSection();
+            return (TrueDialogConfigSection)ConfigurationManager.GetSection("trueDialog");
         }
 
         [ConfigurationProperty("auth", IsRequired = true)]
@@ -62,23 +60,6 @@ namespace TrueDialog.Configuration
         {
             get { return (TimeSpan)this["timeout"]; }
             set { this["timeout"] = value; }
-        }
-
-        /// <summary>
-        /// Determins how we should attempt to retry errors.
-        /// </summary>
-        [ConfigurationProperty("retryPolicy")]
-        internal RetryStrategyElement InnerRetryPolicy
-        {
-            get { return (RetryStrategyElement)this["retryPolicy"]; }
-            set { this["retryPolicy"] = value; }
-        }
-
-        /// <summary />
-        public IRetryConfig RetryPolicy
-        {
-            get { return InnerRetryPolicy; }
-            set { InnerRetryPolicy = (RetryStrategyElement)value; }
         }
     }
 }

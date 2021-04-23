@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class CallbackContext : BaseContext, ICallbackContext
     {
-        internal CallbackContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal CallbackContext(IApiCaller api) : base(api)
         {
         }
         

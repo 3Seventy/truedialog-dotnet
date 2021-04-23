@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class LinkContext : BaseContext, ILinkContext
     {
-        internal LinkContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal LinkContext(IApiCaller api) : base(api)
         {
         }
 

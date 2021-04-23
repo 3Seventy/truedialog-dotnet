@@ -6,7 +6,7 @@ namespace TrueDialog.Context
 {
     internal class UserContext : BaseContext, IUserContext
     {
-        internal UserContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal UserContext(IApiCaller api) : base(api)
         {
         }
 

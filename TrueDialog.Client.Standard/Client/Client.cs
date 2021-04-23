@@ -1,13 +1,15 @@
-﻿using TrueDialog.Configuration;
+﻿using System.Threading;
+
+using TrueDialog.Configuration;
 using TrueDialog.Model;
 
 namespace TrueDialog
 {
-    public sealed partial class Client
+    public sealed class Client
     {
-        private static readonly object m_mutex = new object();
         private static TrueDialogClient m_client;
-        private static IConfiguration Configuration;
+
+        private static readonly SemaphoreSlim m_semaphore = new SemaphoreSlim(1);
 
         public static TrueDialogClient Singleton
         {
@@ -15,18 +17,15 @@ namespace TrueDialog
             {
                 if (m_client == null)
                 {
-                    lock (m_mutex)
-                    {
-                        m_client = new TrueDialogClient();
-                    }
+                    m_semaphore.Wait();
+
+                    if (m_client == null)
+                        m_client = new TrueDialogClient(new ClassicTrueDialogConfigProvider());
+
+                    m_semaphore.Release();
                 }
                 return m_client;
             }
-        }
-
-        public static void SetConfig(IConfiguration config)
-        {
-            Configuration = config;
         }
 
         public static bool Authorize(string username, string password, out UserInfo userInfo)
@@ -34,32 +33,37 @@ namespace TrueDialog
             var rval = false;
             userInfo = null;
 
-            lock (m_mutex)
-            {
-                var internalClient = new InternalClient(Configuration, 0, username, password, false);
-                try
-                {
-                    userInfo = internalClient.GetItem<UserInfo>("/userinfo", null);
-                    if (userInfo != null)
-                    {
-                        rval = true;
+            m_semaphore.Wait();
 
-                        var auth = new TrueDialogAuthElement
-                        {
-                            AccountId = userInfo.AccountId,
-                            ApiKey = userInfo.ApiKey.Key,
-                            ApiSecret = userInfo.ApiKey.Secret,
-                            UserName = username,
-                            Password = password
-                        };
-                        m_client = new TrueDialogClient(new InternalClient(Configuration, auth));
-                    }
-                }
-                catch (System.Exception)
+            try
+            {
+                var api = new ApiCaller(new RawTrueDialogConfigProvider(username, password));
+
+                userInfo = api.Get<UserInfo>("userinfo");
+                if (userInfo != null)
                 {
-                    // just ignore
+                    rval = true;
+
+                    var config = new TrueDialogConfig
+                    {
+                        AccountId = userInfo.AccountId,
+                        ApiKey = userInfo.ApiKey.Key,
+                        ApiSecret = userInfo.ApiKey.Secret,
+                        Username = username,
+                        Password = password,
+                        BaseUrl = Defaults.BaseUrl,
+                        Timeout = Defaults.Timeout,
+                        UserAgent = Defaults.UserAgent
+                    };
+                    m_client = new TrueDialogClient(new ApiCaller(config));
                 }
             }
+            catch
+            {
+                // just ignore
+            }
+
+            m_semaphore.Release();
 
             return rval;
         }

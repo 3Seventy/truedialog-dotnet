@@ -4,6 +4,8 @@ namespace TrueDialog
 {
     internal interface IApiCaller
     {
+        int AccountId { get; set; }
+
         T Get<T>(string url, bool throwIfEmpty = false, object oData = null);
 
         Task<T> GetAsync<T>(string url, bool throwIfEmpty = false, object oData = null);

@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class KeywordContext : BaseContext, IKeywordContext
     {
-        internal KeywordContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal KeywordContext(IApiCaller api) : base(api)
         {
         }
 

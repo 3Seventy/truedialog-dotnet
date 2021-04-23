@@ -7,7 +7,7 @@ namespace TrueDialog.Context
 {
     internal class ContactAttributeContext : BaseContext, IContactAttributeContext
     {
-        internal ContactAttributeContext(ITrueDialogClient client, IApiCaller api) : base(client, api)
+        internal ContactAttributeContext(IApiCaller api) : base(api)
         {
         }
 
