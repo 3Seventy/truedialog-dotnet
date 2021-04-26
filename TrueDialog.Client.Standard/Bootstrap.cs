@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 using TrueDialog.Configuration;
 
@@ -6,7 +7,7 @@ namespace TrueDialog
 {
     public static class Bootstrap
     {
-        public static IServiceCollection UseTrueDialog(this IServiceCollection services, bool singleton = true)
+        public static IServiceCollection AddTrueDialog(this IServiceCollection services, bool singleton = true)
         {
             if (singleton)
                 return services
@@ -18,7 +19,7 @@ namespace TrueDialog
                     .AddScoped<ITrueDialogClient, TrueDialogClient>();
         }
 
-        public static IServiceCollection UseTrueDialog<T>(this IServiceCollection services, bool singleton = true)
+        public static IServiceCollection AddTrueDialog<T>(this IServiceCollection services, bool singleton = true)
             where T: ITrueDialogConfigProvider
         {
             if (singleton)

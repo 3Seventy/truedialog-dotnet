@@ -17,12 +17,17 @@ namespace TrueDialog
             {
                 if (m_client == null)
                 {
-                    m_semaphore.Wait();
+                    try
+                    {
+                        m_semaphore.Wait();
 
-                    if (m_client == null)
-                        m_client = new TrueDialogClient(new ClassicTrueDialogConfigProvider());
-
-                    m_semaphore.Release();
+                        if (m_client == null)
+                            m_client = new TrueDialogClient(new ClassicTrueDialogConfigProvider());
+                    }
+                    finally
+                    {
+                        m_semaphore.Release();
+                    }
                 }
                 return m_client;
             }
@@ -33,10 +38,10 @@ namespace TrueDialog
             var rval = false;
             userInfo = null;
 
-            m_semaphore.Wait();
-
             try
             {
+                m_semaphore.Wait();
+
                 var api = new ApiCaller(new RawTrueDialogConfigProvider(username, password));
 
                 userInfo = api.Get<UserInfo>("userinfo");
@@ -62,8 +67,10 @@ namespace TrueDialog
             {
                 // just ignore
             }
-
-            m_semaphore.Release();
+            finally
+            {
+                m_semaphore.Release();
+            }
 
             return rval;
         }

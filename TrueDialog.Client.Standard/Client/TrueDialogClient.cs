@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 
 using System.Reflection;
+using System.Threading;
 
 using TrueDialog.Configuration;
 using TrueDialog.Context;
@@ -32,13 +33,14 @@ namespace TrueDialog
         #region Contexts
 
         private readonly ConcurrentDictionary<string, BaseContext> m_contextDictionary = new ConcurrentDictionary<string, BaseContext>();
-        private readonly object m_mutex = new object();
+        private readonly SemaphoreSlim m_semaphore = new SemaphoreSlim(1);
 
         internal TContext GetContext<TContext>()
             where TContext : BaseContext
         {
-            lock (m_mutex)
+            try
             {
+                m_semaphore.Wait();
                 string key = typeof(TContext).Name;
                 if (m_contextDictionary.ContainsKey(key))
                     return m_contextDictionary[key] as TContext;
@@ -51,6 +53,10 @@ namespace TrueDialog
                     m_contextDictionary[key] = context;
                     return context;
                 }
+            }
+            finally
+            {
+                m_semaphore.Release();
             }
         }
 

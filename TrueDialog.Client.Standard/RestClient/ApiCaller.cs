@@ -129,18 +129,18 @@ namespace TrueDialog
             return req;
         }
 
-        private string ReadResponse(WebResponse response)
+        private async Task<string> ReadResponse(WebResponse response)
         {
             using (var stream = response.GetResponseStream())
             {
                 if (stream != null)
                 {
                     using (var sr = new StreamReader(stream))
-                        return sr.ReadToEnd();
+                        return await sr.ReadToEndAsync();
                 }
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         private async Task<byte[]> ReadResponseAsByteArrayAsync(WebResponse response)
@@ -163,7 +163,7 @@ namespace TrueDialog
             if (body != null)
             {
                 using (var sw = new StreamWriter(await request.GetRequestStreamAsync()))
-                    sw.Write(JsonConvert.SerializeObject(body));
+                    await sw.WriteAsync(JsonConvert.SerializeObject(body));
             }
 
             string response;
@@ -174,14 +174,14 @@ namespace TrueDialog
             {
                 using (var resp = await request.GetResponseAsync())
                 {
-                    response = ReadResponse(resp);
+                    response = await ReadResponse(resp);
                     contentType = resp.ContentType;
                     statusCode = (int)((HttpWebResponse)resp).StatusCode;
                 }
             }
             catch (WebException ex) when (ex.Response != null)
             {
-                response = ReadResponse(ex.Response);
+                response = await ReadResponse(ex.Response);
                 contentType = ex.Response.ContentType;
                 statusCode = (int)((HttpWebResponse)ex.Response).StatusCode;
             }
@@ -226,55 +226,57 @@ namespace TrueDialog
 
         private static byte[] BuildMultipartFormData(Dictionary<string, object> postParameters, string boundary)
         {
-            Stream formDataStream = new MemoryStream();
-            bool needsCLRF = false;
-
-            foreach (var param in postParameters)
+            using (Stream formDataStream = new MemoryStream())
             {
-                // Thanks to feedback from commenters, add a CRLF to allow multiple parameters to be added.
-                // Skip it on the first parameter, add it to subsequent parameters.
-                if (needsCLRF)
-                    formDataStream.Write(Encoding.UTF8.GetBytes("\r\n"), 0, Encoding.UTF8.GetByteCount("\r\n"));
+                bool needsCLRF = false;
 
-                needsCLRF = true;
-
-                if (param.Value is FileParameter)
+                foreach (var param in postParameters)
                 {
-                    FileParameter fileToUpload = (FileParameter)param.Value;
+                    // Thanks to feedback from commenters, add a CRLF to allow multiple parameters to be added.
+                    // Skip it on the first parameter, add it to subsequent parameters.
+                    if (needsCLRF)
+                        formDataStream.Write(Encoding.UTF8.GetBytes("\r\n"), 0, Encoding.UTF8.GetByteCount("\r\n"));
 
-                    // Add just the first part of this param, since we will write the file data directly to the Stream
-                    string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
-                        boundary,
-                        param.Key,
-                        fileToUpload.FileName ?? param.Key,
-                        fileToUpload.ContentType ?? "application/octet-stream");
+                    needsCLRF = true;
 
-                    formDataStream.Write(Encoding.UTF8.GetBytes(header), 0, Encoding.UTF8.GetByteCount(header));
+                    if (param.Value is FileParameter)
+                    {
+                        FileParameter fileToUpload = (FileParameter)param.Value;
 
-                    // Write the file data directly to the Stream, rather than serializing it to a string.
-                    formDataStream.Write(fileToUpload.File, 0, fileToUpload.File.Length);
+                        // Add just the first part of this param, since we will write the file data directly to the Stream
+                        string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
+                            boundary,
+                            param.Key,
+                            fileToUpload.FileName ?? param.Key,
+                            fileToUpload.ContentType ?? "application/octet-stream");
+
+                        formDataStream.Write(Encoding.UTF8.GetBytes(header), 0, Encoding.UTF8.GetByteCount(header));
+
+                        // Write the file data directly to the Stream, rather than serializing it to a string.
+                        formDataStream.Write(fileToUpload.File, 0, fileToUpload.File.Length);
+                    }
+                    else
+                    {
+                        string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
+                            boundary,
+                            param.Key,
+                            param.Value);
+                        formDataStream.Write(Encoding.UTF8.GetBytes(postData), 0, Encoding.UTF8.GetByteCount(postData));
+                    }
                 }
-                else
-                {
-                    string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
-                        boundary,
-                        param.Key,
-                        param.Value);
-                    formDataStream.Write(Encoding.UTF8.GetBytes(postData), 0, Encoding.UTF8.GetByteCount(postData));
-                }
+
+                // Add the end of the request.  Start with a newline
+                string footer = "\r\n--" + boundary + "--\r\n";
+                formDataStream.Write(Encoding.UTF8.GetBytes(footer), 0, Encoding.UTF8.GetByteCount(footer));
+
+                // Dump the Stream into a byte[]
+                formDataStream.Position = 0;
+                byte[] formData = new byte[formDataStream.Length];
+                formDataStream.Read(formData, 0, formData.Length);
+                formDataStream.Close();
+
+                return formData;
             }
-
-            // Add the end of the request.  Start with a newline
-            string footer = "\r\n--" + boundary + "--\r\n";
-            formDataStream.Write(Encoding.UTF8.GetBytes(footer), 0, Encoding.UTF8.GetByteCount(footer));
-
-            // Dump the Stream into a byte[]
-            formDataStream.Position = 0;
-            byte[] formData = new byte[formDataStream.Length];
-            formDataStream.Read(formData, 0, formData.Length);
-            formDataStream.Close();
-
-            return formData;
         }
 
         private async Task<string> RawMultipartFormDataPostAsync(string url, object urlArgs, Dictionary<string, object> postParameters)
@@ -296,14 +298,14 @@ namespace TrueDialog
             {
                 using (var resp = await request.GetResponseAsync())
                 {
-                    response = ReadResponse(resp);
+                    response = await ReadResponse(resp);
                     contentType = resp.ContentType;
                     statusCode = (int)((HttpWebResponse)resp).StatusCode;
                 }
             }
             catch (WebException ex) when (ex.Response != null)
             {
-                response = ReadResponse(ex.Response);
+                response = await ReadResponse(ex.Response);
                 contentType = ex.Response.ContentType;
                 statusCode = (int)((HttpWebResponse)ex.Response).StatusCode;
             }
@@ -344,7 +346,7 @@ namespace TrueDialog
             }
             catch (WebException ex) when (ex.Response != null)
             {
-                response = ReadResponse(ex.Response);
+                response = await ReadResponse(ex.Response);
                 contentType = ex.Response.ContentType;
                 statusCode = (int)((HttpWebResponse)ex.Response).StatusCode;
             }
