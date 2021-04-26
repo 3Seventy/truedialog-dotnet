@@ -2,7 +2,7 @@
 
 namespace TrueDialog.Configuration
 {
-    internal class TrueDialogConfigProvider : ITrueDialogConfigProvider
+    public class TrueDialogConfigProvider : ITrueDialogConfigProvider
     {
         private const string Section = "TrueDialog";
         private readonly IConfiguration m_config;

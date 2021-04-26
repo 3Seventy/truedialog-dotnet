@@ -1,6 +1,6 @@
 ﻿namespace TrueDialog.Configuration
 {
-    internal class ClassicTrueDialogConfigProvider : ITrueDialogConfigProvider
+    public class ClassicTrueDialogConfigProvider : ITrueDialogConfigProvider
     {
         public ITrueDialogConfig GetConfig()
         {
