@@ -13,7 +13,7 @@ namespace TrueDialog.Context
 
         public List<ApiKey> GetList(int accountId, bool throwIfEmpty = false)
         {
-            return Api.Get<List<ApiKey>>($"/account/{accountId}/api-key", throwIfEmpty);
+            return Api.AsUser().Get<List<ApiKey>>($"/account/{accountId}/api-key", throwIfEmpty);
         }
 
         public List<ApiKey> GetList(bool throwIfEmpty = false)
@@ -23,7 +23,7 @@ namespace TrueDialog.Context
 
         public ApiKey GetById(int accountId, int keyId, bool throwIfEmpty = false)
         {
-            return Api.Get<ApiKey>($"/account/{accountId}/api-key/{keyId}", throwIfEmpty);
+            return Api.AsUser().Get<ApiKey>($"/account/{accountId}/api-key/{keyId}", throwIfEmpty);
         }
 
         public ApiKey GetById(int keyId, bool throwIfEmpty = false)
@@ -33,7 +33,7 @@ namespace TrueDialog.Context
 
         private ApiKey Create(int accountId, ApiKey key)
         {
-            return Api.Post($"/account/{accountId}/api-key", key);
+            return Api.AsUser().Post($"/account/{accountId}/api-key", key);
         }
 
         public ApiKey CreateTemporary(int accountId, string label, DateTime validTo)
@@ -67,7 +67,7 @@ namespace TrueDialog.Context
 
         public ApiKey UpdateSecret(int accountId, int keyId)
         {
-            return Api.Put<ApiKey>($"/account/{accountId}/api-key/{keyId}", null);
+            return Api.AsUser().Put<ApiKey>($"/account/{accountId}/api-key/{keyId}", null);
         }
 
         public ApiKey UpdateSecret(ApiKey key)
@@ -82,7 +82,7 @@ namespace TrueDialog.Context
 
         public void Revoke(int accountId, int keyId)
         {
-            Api.Delete($"/account/{accountId}/api-key/{keyId}");
+            Api.AsUser().Delete($"/account/{accountId}/api-key/{keyId}");
         }
 
         public void Revoke(ApiKey key)

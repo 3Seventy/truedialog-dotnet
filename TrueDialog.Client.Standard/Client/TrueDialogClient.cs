@@ -23,6 +23,15 @@ namespace TrueDialog
             m_api = new ApiCaller(configFactory);
         }
 
+        public TrueDialogClient(string username, string password)
+        {
+            m_api = new ApiCaller(new TrueDialogConfig
+            {
+                Username = username,
+                Password = password
+            });
+        }
+
         public int AccountId { get { return m_api.AccountId; } }
 
         public void SetAccountId(int accountId)

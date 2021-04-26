@@ -18,6 +18,8 @@ namespace TrueDialog
     {
         private readonly ITrueDialogConfig m_config;
 
+        private bool m_asUser;
+
         private readonly string m_baseUrl;
 
         private readonly string m_apiHeader;
@@ -69,6 +71,13 @@ namespace TrueDialog
                 m_apiHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{m_config.ApiKey}:{m_config.ApiSecret}"));
 
             AccountId = m_config.AccountId.Value;
+        }
+
+        public IApiCaller AsUser()
+        {
+            m_asUser = true;
+
+            return this;
         }
 
         private string AddQueryArgs(string url, string args) => (url.Contains("?") ? "&" : "?") + args;
@@ -123,8 +132,10 @@ namespace TrueDialog
 
             req.Timeout = (int)m_config.Timeout;
             req.ContentType = "application/json";
-            req.Headers.Add("Authorization", string.IsNullOrEmpty(m_apiHeader) ? m_authHeader : m_apiHeader);
+            req.Headers.Add("Authorization", string.IsNullOrEmpty(m_apiHeader) || (!string.IsNullOrEmpty(m_authHeader) && m_asUser) ? m_authHeader : m_apiHeader);
             req.Method = method;
+
+            m_asUser = false;
 
             return req;
         }

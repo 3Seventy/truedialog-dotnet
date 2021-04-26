@@ -4,6 +4,8 @@ namespace TrueDialog
 {
     internal interface IApiCaller
     {
+        IApiCaller AsUser();
+
         int AccountId { get; set; }
 
         T Get<T>(string url, bool throwIfEmpty = false, object oData = null);

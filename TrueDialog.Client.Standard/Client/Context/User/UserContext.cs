@@ -12,12 +12,12 @@ namespace TrueDialog.Context
 
         public User GetSelf()
         {
-            return Api.Get<User>($"userinfo", true);
+            return Api.AsUser().Get<User>($"userinfo", true);
         }
 
         public List<User> GetList(int accountId, bool throwIfEmpty = false)
         {
-            return Api.Get<List<User>>($"account/{accountId}/user", throwIfEmpty);
+            return Api.AsUser().Get<List<User>>($"account/{accountId}/user", throwIfEmpty);
         }
 
         public List<User> GetList(bool throwIfEmpty = false)
@@ -27,7 +27,7 @@ namespace TrueDialog.Context
 
         public User GetUser(int accountId, string username, bool throwIfEmpty = true)
         {
-            return Api.Get<User>($"account/{accountId}/user/{username}", throwIfEmpty);
+            return Api.AsUser().Get<User>($"account/{accountId}/user/{username}", throwIfEmpty);
         }
 
         public User GetUser(string username, bool throwIfEmpty = true)
@@ -38,7 +38,7 @@ namespace TrueDialog.Context
         public User Create(int accountId, User user)
         {
             user.PasswordConfirmation = user.Password;
-            return Api.Post($"account/{accountId}/user", user);
+            return Api.AsUser().Post($"account/{accountId}/user", user);
         }
 
         public User Create(User user)
@@ -48,12 +48,12 @@ namespace TrueDialog.Context
 
         public User Update(User user)
         {
-            return Api.Put($"account/{user.AccountId}/user/{user.UserName}", user);
+            return Api.AsUser().Put($"account/{user.AccountId}/user/{user.UserName}", user);
         }
 
         public void Delete(int accountId, string username)
         {
-            Api.Delete($"account/{accountId}/user/{username}");
+            Api.AsUser().Delete($"account/{accountId}/user/{username}");
         }
 
         public void Delete(string username)
@@ -68,7 +68,7 @@ namespace TrueDialog.Context
 
         public void Lock(int accountId, string username)
         {
-            Api.Post<string>($"account/{accountId}/user/{username}/lock", null);
+            Api.AsUser().Post<string>($"account/{accountId}/user/{username}/lock", null);
         }
 
         public void Lock(string username)
@@ -83,7 +83,7 @@ namespace TrueDialog.Context
 
         public void Unlock(int accountId, string username)
         {
-            Api.Put<string>($"account/{accountId}/user/{username}/lock", null);
+            Api.AsUser().Put<string>($"account/{accountId}/user/{username}/lock", null);
         }
 
         public void Unlock(string username)
@@ -98,7 +98,7 @@ namespace TrueDialog.Context
 
         public void UpdatePassword(int accountId, string username, string currentPassword, string newPassword)
         {
-            Api.Put<string>($"account/{accountId}/user/{username}/password", new { CurrentPassword = currentPassword, NewPassword = newPassword, ConfirmPassword = newPassword });
+            Api.AsUser().Put<string>($"account/{accountId}/user/{username}/password", new { CurrentPassword = currentPassword, NewPassword = newPassword, ConfirmPassword = newPassword });
         }
 
         public void UpdatePassword(string username, string currentPassword, string newPassword)
