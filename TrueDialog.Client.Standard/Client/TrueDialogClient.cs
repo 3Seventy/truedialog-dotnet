@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-
-using System.Reflection;
-using System.Threading;
 
 using TrueDialog.Configuration;
 using TrueDialog.Context;
@@ -12,24 +8,22 @@ namespace TrueDialog
     public class TrueDialogClient : ITrueDialogClient
     {
         private readonly IApiCaller m_api;
+        private readonly ContextBuilder m_contextBuilder;
 
         internal TrueDialogClient(IApiCaller api)
         {
             m_api = api;
+            m_contextBuilder = new ContextBuilder(api);
         }
 
         public TrueDialogClient(ITrueDialogConfigProvider configFactory)
+            : this(new ApiCaller(configFactory))
         {
-            m_api = new ApiCaller(configFactory);
         }
 
         public TrueDialogClient(string username, string password)
+            : this(new ApiCaller(new TrueDialogConfig { Username = username, Password = password }))
         {
-            m_api = new ApiCaller(new TrueDialogConfig
-            {
-                Username = username,
-                Password = password
-            });
         }
 
         public int AccountId { get { return m_api.AccountId; } }
@@ -41,32 +35,11 @@ namespace TrueDialog
 
         #region Contexts
 
-        private readonly ConcurrentDictionary<string, BaseContext> m_contextDictionary = new ConcurrentDictionary<string, BaseContext>();
-        private readonly SemaphoreSlim m_semaphore = new SemaphoreSlim(1);
-
         internal TContext GetContext<TContext>()
             where TContext : BaseContext
         {
-            try
-            {
-                m_semaphore.Wait();
-                string key = typeof(TContext).Name;
-                if (m_contextDictionary.ContainsKey(key))
-                    return m_contextDictionary[key] as TContext;
-                else
-                {
-                    var constructor = typeof(TContext).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance,
-                        null, new Type[] { typeof(IApiCaller) }, null);
-                    var context = (TContext)constructor.Invoke(new object[] { m_api });
-
-                    m_contextDictionary[key] = context;
-                    return context;
-                }
-            }
-            finally
-            {
-                m_semaphore.Release();
-            }
+            CheckAuthenticated();
+            return m_contextBuilder.GetContext<TContext>();
         }
 
         private void CheckAuthenticated()
