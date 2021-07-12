@@ -44,7 +44,7 @@ namespace TrueDialog
 
                 var api = new ApiCaller(new RawTrueDialogConfigProvider(username, password));
 
-                userInfo = api.Get<UserInfo>("userinfo");
+                userInfo = api.AsUser().Get<UserInfo>("userinfo");
                 if (userInfo != null)
                 {
                     rval = true;

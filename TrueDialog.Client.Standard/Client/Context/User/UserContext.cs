@@ -10,9 +10,9 @@ namespace TrueDialog.Context
         {
         }
 
-        public User GetSelf()
+        public UserInfo GetSelf()
         {
-            return Api.AsUser().Get<User>($"userinfo", true);
+            return Api.AsUser().Get<UserInfo>($"userinfo", true);
         }
 
         public List<User> GetList(int accountId, bool throwIfEmpty = false)

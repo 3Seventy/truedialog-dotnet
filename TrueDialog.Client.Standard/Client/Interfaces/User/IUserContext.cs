@@ -6,7 +6,7 @@ namespace TrueDialog
 {
     public interface IUserContext
     {
-        User GetSelf();
+        UserInfo GetSelf();
 
         List<User> GetList(int accountId, bool throwIfEmpty = false);
 
