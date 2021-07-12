@@ -26,6 +26,11 @@ namespace TrueDialog
         {
         }
 
+        public TrueDialogClient(string apiKey, string apiSecret, int accountId)
+            : this(new ApiCaller(new TrueDialogConfig { ApiKey = apiKey, ApiSecret = apiSecret, AccountId = accountId }))
+        {
+        }
+
         public int AccountId { get { return m_api.AccountId; } }
 
         public void SetAccountId(int accountId)
