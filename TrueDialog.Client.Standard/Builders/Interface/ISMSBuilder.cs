@@ -1,4 +1,6 @@
-﻿using TrueDialog.Model;
+﻿using System.Collections.Generic;
+
+using TrueDialog.Model;
 
 namespace TrueDialog.Builders
 {
@@ -9,6 +11,8 @@ namespace TrueDialog.Builders
         ISMSBuilder From(string from);
 
         ISMSBuilder To(string to);
+
+        ISMSBuilder To(IEnumerable<string> to);
 
         ISMSBuilder Campaign(int campaignId);
 

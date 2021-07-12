@@ -11,6 +11,16 @@ namespace TrueDialog.Context
         {
         }
         
+        public Account EnableCallbacks(int accountId)
+        {
+            return Api.Put<Account>($"/account/{accountId}/callback-switch", true);
+        }
+
+        public Account DisableCallbacks(int accountId)
+        {
+            return Api.Put<Account>($"/account/{accountId}/callback-switch", false);
+        }
+
         public List<Callback> GetList(int accountId, bool throwIfEmpty = false)
         {
             return Api.Get<List<Callback>>($"/account/{accountId}/callback", throwIfEmpty);

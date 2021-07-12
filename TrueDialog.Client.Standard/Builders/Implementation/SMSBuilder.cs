@@ -11,8 +11,8 @@ namespace TrueDialog.Builders
     {
         internal string _message;
         internal int? _campaignId;
-        internal List<string> _from = new List<string>();
-        internal List<string> _to = new List<string>();
+        internal ISet<string> _from = new HashSet<string>();
+        internal ISet<string> _to = new HashSet<string>();
 
         private readonly IMessageContext m_context;
 
@@ -39,6 +39,12 @@ namespace TrueDialog.Builders
             return this;
         }
 
+        public ISMSBuilder To(IEnumerable<string> to)
+        {
+            _to.AddRange(to.Select(Utils.ReadPhoneNumber));
+            return this;
+        }
+
         public ISMSBuilder Campaign(int campaignId)
         {
             _campaignId = campaignId;
@@ -56,8 +62,8 @@ namespace TrueDialog.Builders
             return new ActionPushCampaign
             {
                 CampaignId = _campaignId ?? 0,
-                Channels = _from,
-                Targets = _to,
+                Channels = _from.ToList(),
+                Targets = _to.ToList(),
                 Message = _message,
                 Execute = true
             };
