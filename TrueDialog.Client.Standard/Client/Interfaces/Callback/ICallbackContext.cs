@@ -6,6 +6,10 @@ namespace TrueDialog
 {
     public interface ICallbackContext
     {
+        Account EnableCallbacks(int accountId);
+
+        Account DisableCallbacks(int accountId);
+
         List<Callback> GetList(int accountId, bool throwIfEmpty = false);
 
         List<Callback> GetList(bool throwIfEmpty = false);
