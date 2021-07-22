@@ -16,6 +16,10 @@ namespace TrueDialog.Builders
 
         ISMSBuilder Campaign(int campaignId);
 
+        ISMSBuilder IgnoreInvalidTargets(bool ignore = true);
+
+        ISMSBuilder ForceOptIn(bool forceOptIn = true);
+
         ActionPushCampaign Send();
     }
 }

@@ -142,6 +142,12 @@ namespace TrueDialog.Model
         [DataMember]
         public bool ForceOptIn { get; set; }
 
+        /// <summary>
+        /// Set to push to ignore targets validation on API level
+        /// </summary>
+        [DataMember]
+        public bool IgnoreInvalidTargets { get; set; }
+
         #region Gateway Campaign Parameters
 
         // These fields are only needed for gateway campaigns.  For all other campaign types they will be ignored.
@@ -182,6 +188,5 @@ namespace TrueDialog.Model
         public string Subject { get; set; }
 
         #endregion
-
     }
 }

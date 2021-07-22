@@ -9,10 +9,13 @@ namespace TrueDialog.Builders
 {
     public class SMSBuilder : ISMSBuilder
     {
-        internal string _message;
-        internal int? _campaignId;
-        internal ISet<string> _from = new HashSet<string>();
-        internal ISet<string> _to = new HashSet<string>();
+        private readonly ISet<string> m_from = new HashSet<string>();
+        private readonly ISet<string> m_to = new HashSet<string>();
+
+        private string m_message;
+        private int? m_campaignId;
+        private bool m_ignoreInvalidTargets;
+        private bool m_forceOptIn;
 
         private readonly IMessageContext m_context;
 
@@ -21,33 +24,45 @@ namespace TrueDialog.Builders
             m_context = context;
         }
 
+        public ISMSBuilder IgnoreInvalidTargets(bool ignore = true)
+        {
+            m_ignoreInvalidTargets = ignore;
+            return this;
+        }
+
+        public ISMSBuilder ForceOptIn(bool forceOptIn = true)
+        {
+            m_forceOptIn = forceOptIn;
+            return this;
+        }
+
         public ISMSBuilder Text(string messageText)
         {
-            _message = messageText;
+            m_message = messageText;
             return this;
         }
 
         public ISMSBuilder From(string from)
         {
-            _from.Add(from);
+            m_from.Add(from);
             return this;
         }
 
         public ISMSBuilder To(string to)
         {
-            _to.Add(Utils.ReadPhoneNumber(to));
+            m_to.Add(Utils.ReadPhoneNumber(to));
             return this;
         }
 
         public ISMSBuilder To(IEnumerable<string> to)
         {
-            _to.AddRange(to.Select(Utils.ReadPhoneNumber));
+            m_to.AddRange(to.Select(Utils.ReadPhoneNumber));
             return this;
         }
 
         public ISMSBuilder Campaign(int campaignId)
         {
-            _campaignId = campaignId;
+            m_campaignId = campaignId;
             return this;
         }
 
@@ -61,23 +76,25 @@ namespace TrueDialog.Builders
         {
             return new ActionPushCampaign
             {
-                CampaignId = _campaignId ?? 0,
-                Channels = _from.ToList(),
-                Targets = _to.ToList(),
-                Message = _message,
-                Execute = true
+                CampaignId = m_campaignId ?? 0,
+                Channels = m_from.ToList(),
+                Targets = m_to.ToList(),
+                Message = m_message,
+                Execute = true,
+                IgnoreInvalidTargets = m_ignoreInvalidTargets,
+                ForceOptIn = m_forceOptIn
             };
         }
 
         private void Validate()
         {
-            if (!_from.Any())
+            if (!m_from.Any())
                 throw new ArgumentException("From address can't be empty.");
 
-            if (!_to.Any())
+            if (!m_to.Any())
                 throw new ArgumentException("To address can't be empty.");
 
-            if (string.IsNullOrEmpty(_message) && !_campaignId.HasValue)
+            if (string.IsNullOrEmpty(m_message) && !m_campaignId.HasValue)
                 throw new ArgumentException("Message text can't be empty.");
         }
     }
