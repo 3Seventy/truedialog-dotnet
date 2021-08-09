@@ -66,6 +66,12 @@ namespace TrueDialog.Model
         public bool RequestLocation { get; set; }
 
         /// <summary>
+        /// Set if dynamic links should not add URL parameters.
+        /// </summary>
+        [DataMember]
+        public bool RemoveUrlParameters { get; set; }
+
+        /// <summary>
         /// The short URL to use.
         /// </summary>
         [DataMember]
