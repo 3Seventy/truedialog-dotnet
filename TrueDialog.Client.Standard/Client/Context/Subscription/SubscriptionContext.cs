@@ -10,12 +10,12 @@ namespace TrueDialog.Context
         {
         }
 
-        public List<Subscription> GetList(int accountId, bool throwIfEmpty = false)
+        public List<Subscription> GetList(int accountId, bool includeChildren = false, bool throwIfEmpty = false)
         {
-            return Api.Get<List<Subscription>>($"account/{accountId}/subscription", throwIfEmpty);
+            return Api.Get<List<Subscription>>($"account/{accountId}/subscription?includeChildren={includeChildren}", throwIfEmpty);
 
         }
-        public List<Subscription> GetList(bool throwIfEmpty = false)
+        public List<Subscription> GetList(bool includeChildren = false, bool throwIfEmpty = false)
         {
             return GetList(CurrentAccount, throwIfEmpty);
         }
