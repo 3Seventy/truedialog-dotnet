@@ -81,5 +81,17 @@ namespace TrueDialog.Model
             get { return (SubscriptionType)SubscriptionTypeId; }
             set { SubscriptionTypeId = (int)value; }
         }
+
+        /// <summary>
+        /// Chat subscription flag
+        /// </summary>
+        [DataMember]
+        public bool IsChat { get; set; }
+
+        /// <summary>
+        /// Default subscription flag
+        /// </summary>
+        [DataMember]
+        public bool IsDefault { get; set; }
     }
 }
