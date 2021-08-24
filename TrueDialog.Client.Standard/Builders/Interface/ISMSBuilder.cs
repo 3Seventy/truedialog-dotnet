@@ -8,6 +8,8 @@ namespace TrueDialog.Builders
     {
         ISMSBuilder Text(string messageText);
 
+        ISMSBuilder WithMedia(int mediaId);
+
         ISMSBuilder From(string from);
 
         ISMSBuilder To(string to);

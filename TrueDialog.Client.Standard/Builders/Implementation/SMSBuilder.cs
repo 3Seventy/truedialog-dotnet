@@ -16,6 +16,7 @@ namespace TrueDialog.Builders
         private int? m_campaignId;
         private bool m_ignoreInvalidTargets;
         private bool m_forceOptIn;
+        private int? m_mediaId;
 
         private readonly IMessageContext m_context;
 
@@ -39,6 +40,12 @@ namespace TrueDialog.Builders
         public ISMSBuilder Text(string messageText)
         {
             m_message = messageText;
+            return this;
+        }
+
+        public ISMSBuilder WithMedia(int mediaId)
+        {
+            m_mediaId = mediaId;
             return this;
         }
 
@@ -82,7 +89,8 @@ namespace TrueDialog.Builders
                 Message = m_message,
                 Execute = true,
                 IgnoreInvalidTargets = m_ignoreInvalidTargets,
-                ForceOptIn = m_forceOptIn
+                ForceOptIn = m_forceOptIn,
+                MediaId = m_mediaId
             };
         }
 
