@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 using TrueDialog.Model;
 
@@ -59,7 +60,8 @@ namespace TrueDialog.Context
             var fileName = String.Format("ACCT{0}_{1}_Media{2}", accountId, DateTime.UtcNow.Ticks, extension);
             var contentType = ContentTypeFromMime(type);
 
-            return Api.Upload<AccountMedia>($"/account/{accountId}/image", byteArray, contentType, fileName);
+            var rval = Api.Upload<List<AccountMedia>>($"/account/{accountId}/image", byteArray, contentType, fileName);
+            return rval.FirstOrDefault();
         }
 
         public AccountMedia UploadAsBase64(int accountId, string base64String)
