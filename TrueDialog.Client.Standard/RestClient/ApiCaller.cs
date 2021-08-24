@@ -224,6 +224,7 @@ namespace TrueDialog
             request.Method = "POST";
             request.ContentType = contentType;
             request.ContentLength = formData.Length;
+            request.Headers.Add("Authorization", string.IsNullOrEmpty(m_apiHeader) || (!string.IsNullOrEmpty(m_authHeader) && m_asUser) ? m_authHeader : m_apiHeader);
 
             // Send the form data to the request.
             using (Stream requestStream = await request.GetRequestStreamAsync())
