@@ -17,7 +17,7 @@ namespace TrueDialog.Context
         }
         public List<Subscription> GetList(bool includeChildren = false, bool throwIfEmpty = false)
         {
-            return GetList(CurrentAccount, throwIfEmpty);
+            return GetList(CurrentAccount, includeChildren, throwIfEmpty);
         }
 
         public Subscription GetById(int accountId, int subscriptionId, bool throwIfEmpty = true)
