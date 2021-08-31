@@ -17,6 +17,8 @@ namespace TrueDialog.Builders
         private bool m_ignoreInvalidTargets;
         private bool m_forceOptIn;
         private int? m_mediaId;
+        private bool m_roundRobinById;
+        private bool m_globalRoundRobin;
 
         private readonly IMessageContext m_context;
 
@@ -73,6 +75,18 @@ namespace TrueDialog.Builders
             return this;
         }
 
+        public ISMSBuilder RoundRobinById(bool roundRobinById = true)
+        {
+            m_roundRobinById = roundRobinById;
+            return this;
+        }
+
+        public ISMSBuilder GlobalRoundRobin(bool globalRoundRobin = true)
+        {
+            m_globalRoundRobin = globalRoundRobin;
+            return this;
+        }
+
         public ActionPushCampaign Send()
         {
             Validate();
@@ -90,7 +104,9 @@ namespace TrueDialog.Builders
                 Execute = true,
                 IgnoreInvalidTargets = m_ignoreInvalidTargets,
                 ForceOptIn = m_forceOptIn,
-                MediaId = m_mediaId
+                MediaId = m_mediaId,
+                RoundRobinById = m_roundRobinById,
+                GlobalRoundRobin = m_globalRoundRobin
             };
         }
 

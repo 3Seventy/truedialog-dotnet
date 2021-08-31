@@ -22,6 +22,10 @@ namespace TrueDialog.Builders
 
         ISMSBuilder ForceOptIn(bool forceOptIn = true);
 
+        ISMSBuilder RoundRobinById(bool roundRobinById = true);
+
+        ISMSBuilder GlobalRoundRobin(bool globalRoundRobin = true);
+
         ActionPushCampaign Send();
     }
 }

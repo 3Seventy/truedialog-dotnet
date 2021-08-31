@@ -59,6 +59,11 @@ namespace TrueDialog.Model
         public bool RoundRobinById { get; set; }
 
         /// <summary>
+        /// Set to keep rolling round-robin across different actions
+        /// </summary>
+        public bool GlobalRoundRobin { get; set; }
+
+        /// <summary>
         /// A list of targets this event will be (or was) sent to.
         /// </summary>
         /// <remarks>
