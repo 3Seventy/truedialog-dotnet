@@ -11,6 +11,7 @@ namespace TrueDialog.Builders
     {
         private readonly ISet<string> m_from = new HashSet<string>();
         private readonly ISet<string> m_to = new HashSet<string>();
+        private readonly ISet<PersonalMessage> m_personalMessages = new HashSet<PersonalMessage>();
 
         private string m_message;
         private int? m_campaignId;
@@ -69,6 +70,28 @@ namespace TrueDialog.Builders
             return this;
         }
 
+        public ISMSBuilder WithPersonalMessages(IEnumerable<PersonalMessage> messages)
+        {
+            if (m_to.Any())
+            {
+                throw new Exception("Can't use both To and Personal Messages in one push.");
+            }
+
+            m_personalMessages.AddRange(messages.Select(m => new PersonalMessage { Target = Utils.ReadPhoneNumber(m.Target), Message = m.Message }));
+            return this;
+        }
+
+        public ISMSBuilder WithPersonalMessages(IDictionary<string, string> messages)
+        {
+            if (m_to.Any())
+            {
+                throw new Exception("Can't use both To and Personal Messages in one push.");
+            }
+
+            m_personalMessages.AddRange(messages.Select(m => new PersonalMessage { Target = Utils.ReadPhoneNumber(m.Key), Message = m.Value }));
+            return this;
+        }
+
         public ISMSBuilder Campaign(int campaignId)
         {
             m_campaignId = campaignId;
@@ -99,7 +122,8 @@ namespace TrueDialog.Builders
             {
                 CampaignId = m_campaignId ?? 0,
                 Channels = m_from.ToList(),
-                Targets = m_to.ToList(),
+                RawTargets = m_to.ToList(),
+                Targets = m_personalMessages.ToList(),
                 Message = m_message,
                 Execute = true,
                 IgnoreInvalidTargets = m_ignoreInvalidTargets,

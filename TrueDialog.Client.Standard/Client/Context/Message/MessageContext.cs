@@ -32,7 +32,7 @@ namespace TrueDialog.Context
             return Api.Post($"account/{CurrentAccount}/action-pushCampaign", new ActionPushCampaign
             {
                 Channels = new List<string> { from },
-                Targets = new List<string> { Utils.ReadPhoneNumber(to) },
+                RawTargets = new List<string> { Utils.ReadPhoneNumber(to) },
                 Message = message,
                 Execute = true
             });

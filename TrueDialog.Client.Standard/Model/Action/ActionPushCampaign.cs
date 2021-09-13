@@ -29,7 +29,12 @@ namespace TrueDialog.Model
         /// <summary>
         /// So we won't return a null value for the list object.
         /// </summary>
-        private List<string> m_targets = new List<string>();
+        private List<string> m_rawTargets = new List<string>();
+
+        /// <summary>
+        /// So we won't return a null value for the list object.
+        /// </summary>
+        private List<PersonalMessage> m_targets = new List<PersonalMessage>();
 
         /// <summary>
         /// So we won't return a null value for the list object.
@@ -61,6 +66,7 @@ namespace TrueDialog.Model
         /// <summary>
         /// Set to keep rolling round-robin across different actions
         /// </summary>
+        [DataMember]
         public bool GlobalRoundRobin { get; set; }
 
         /// <summary>
@@ -73,10 +79,20 @@ namespace TrueDialog.Model
         /// prefixed with their country dialing code. E.g.: {@code (221) 555-0100} should be listed as {@code +12215550100}
         /// </remarks>
         [DataMember]
-        public List<string> Targets
+        public List<string> RawTargets
+        {
+            get { return m_rawTargets; }
+            set { m_rawTargets = value ?? new List<string>(); }
+        }
+
+        /// <summary>
+        /// A list of targets along with a personalized message for each.
+        /// </summary>
+        [DataMember]
+        public List<PersonalMessage> Targets
         {
             get { return m_targets; }
-            set { m_targets = value ?? new List<string>(); }
+            set { m_targets = value ?? new List<PersonalMessage>(); }
         }
 
         /// <summary>

@@ -16,6 +16,10 @@ namespace TrueDialog.Builders
 
         ISMSBuilder To(IEnumerable<string> to);
 
+        ISMSBuilder WithPersonalMessages(IEnumerable<PersonalMessage> messages);
+
+        ISMSBuilder WithPersonalMessages(IDictionary<string, string> messages);
+
         ISMSBuilder Campaign(int campaignId);
 
         ISMSBuilder IgnoreInvalidTargets(bool ignore = true);

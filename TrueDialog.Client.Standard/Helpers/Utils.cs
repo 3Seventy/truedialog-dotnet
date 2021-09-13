@@ -9,6 +9,9 @@ namespace TrueDialog.Helpers
         {
             var rval = RemoveSpecialCharacters(phoneNumber);
 
+            if (string.IsNullOrEmpty(rval))
+                throw new ArgumentException("Phone number is empty.");
+
             if (rval[0] == '1' && rval.Length == 11)
                 return rval;
             else if (rval[0] != '1' && rval.Length == 10)
@@ -22,6 +25,9 @@ namespace TrueDialog.Helpers
         internal static string ReadPhoneNumber(string phoneNumber)
         {
             var rval = RemoveSpecialCharacters(phoneNumber);
+
+            if (string.IsNullOrEmpty(rval))
+                throw new ArgumentException("Phone number is empty.");
 
             if (rval[0] == '1' && rval.Length == 11)
                 rval = "+" + rval;
