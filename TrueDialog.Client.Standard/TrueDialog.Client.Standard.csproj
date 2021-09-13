@@ -8,8 +8,8 @@
     <Company>TrueDialog</Company>
     <PackageProjectUrl>https://truedialog.com/</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.8.8</AssemblyVersion>
-    <FileVersion>1.1.8.8</FileVersion>
+    <AssemblyVersion>1.1.8.9</AssemblyVersion>
+    <FileVersion>1.1.8.9</FileVersion>
     <Description>Basic TrueDialog API client. More info at https://api.truedialog.com/docs/v2.1</Description>
     <Copyright>TrueDialog</Copyright>
     <PackageIcon>logo.png</PackageIcon>

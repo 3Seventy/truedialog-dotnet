@@ -139,10 +139,10 @@ namespace TrueDialog.Builders
             if (!m_from.Any())
                 throw new ArgumentException("From address can't be empty.");
 
-            if (!m_to.Any())
+            if (!m_to.Any() && !m_personalMessages.Any())
                 throw new ArgumentException("To address can't be empty.");
 
-            if (string.IsNullOrEmpty(m_message) && !m_campaignId.HasValue)
+            if (string.IsNullOrEmpty(m_message) && !m_campaignId.HasValue && !m_personalMessages.Any())
                 throw new ArgumentException("Message text can't be empty.");
         }
     }
