@@ -110,7 +110,7 @@ namespace TrueDialog.Builders
             return this;
         }
 
-        public ActionPushCampaign Send()
+        public ReturnActionPushCampaign Send()
         {
             Validate();
             return m_context.Submit(BuildAction());

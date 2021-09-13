@@ -17,19 +17,19 @@ namespace TrueDialog.Context
             return new SMSBuilder(this);
         }
 
-        public ActionPushCampaign Submit(int accountId, ActionPushCampaign action)
+        public ReturnActionPushCampaign Submit(int accountId, ActionPushCampaign action)
         {
-            return Api.Post($"account/{accountId}/action-pushCampaign", action);
+            return Api.Post<ReturnActionPushCampaign>($"account/{accountId}/action-pushCampaign", action);
         }
 
-        public ActionPushCampaign Submit(ActionPushCampaign action)
+        public ReturnActionPushCampaign Submit(ActionPushCampaign action)
         {
             return Submit(CurrentAccount, action);
         }
 
-        public ActionPushCampaign SendBasic(string from, string to, string message)
+        public ReturnActionPushCampaign SendBasic(string from, string to, string message)
         {
-            return Api.Post($"account/{CurrentAccount}/action-pushCampaign", new ActionPushCampaign
+            return Api.Post<ReturnActionPushCampaign>($"account/{CurrentAccount}/action-pushCampaign", new ActionPushCampaign
             {
                 Channels = new List<string> { from },
                 RawTargets = new List<string> { Utils.ReadPhoneNumber(to) },

@@ -7,10 +7,10 @@ namespace TrueDialog
     {
         ISMSBuilder SMS();
 
-        ActionPushCampaign Submit(int accountId, ActionPushCampaign action);
+        ReturnActionPushCampaign Submit(int accountId, ActionPushCampaign action);
 
-        ActionPushCampaign Submit(ActionPushCampaign action);
+        ReturnActionPushCampaign Submit(ActionPushCampaign action);
 
-        ActionPushCampaign SendBasic(string from, string to, string message);
+        ReturnActionPushCampaign SendBasic(string from, string to, string message);
     }
 }

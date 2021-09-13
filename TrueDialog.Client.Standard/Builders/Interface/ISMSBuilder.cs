@@ -30,6 +30,6 @@ namespace TrueDialog.Builders
 
         ISMSBuilder GlobalRoundRobin(bool globalRoundRobin = true);
 
-        ActionPushCampaign Send();
+        ReturnActionPushCampaign Send();
     }
 }
