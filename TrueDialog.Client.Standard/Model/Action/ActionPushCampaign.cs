@@ -281,7 +281,7 @@ namespace TrueDialog.Model
         /// prefixed with their country dialing code. E.g.: {@code (221) 555-0100} should be listed as {@code +12215550100}
         /// </remarks>
         [DataMember]
-        public List<string> RawTargets
+        public List<string> Targets
         {
             get { return m_targets; }
             set { m_targets = value ?? new List<string>(); }
