@@ -38,6 +38,11 @@ namespace TrueDialog
             m_api.AccountId = accountId;
         }
 
+        public void SetSource(string source)
+        {
+            m_api.SetSource(source);
+        }
+
         #region Contexts
 
         internal TContext GetContext<TContext>()

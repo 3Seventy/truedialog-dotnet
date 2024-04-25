@@ -24,6 +24,7 @@ namespace TrueDialog
 
         private readonly string m_apiHeader;
         private readonly string m_authHeader;
+        private string m_sourceHeader = "CUSTOM";
 
         public int AccountId { get; set; }
 
@@ -80,6 +81,11 @@ namespace TrueDialog
             return this;
         }
 
+        public void SetSource(string source)
+        {
+            m_sourceHeader = source;
+        }
+
         private string AddQueryArgs(string url, string args) => (url.Contains("?") ? "&" : "?") + args;
 
         private string AddQueryArgs(string url, IEnumerable<string> items) => AddQueryArgs(url, String.Join("&", items));
@@ -133,6 +139,7 @@ namespace TrueDialog
             req.Timeout = (int)m_config.Timeout;
             req.ContentType = "application/json";
             req.Headers.Add("Authorization", string.IsNullOrEmpty(m_apiHeader) || (!string.IsNullOrEmpty(m_authHeader) && m_asUser) ? m_authHeader : m_apiHeader);
+            req.Headers.Add("X-TD-SOURCE", m_sourceHeader);
             req.Method = method;
 
             m_asUser = false;

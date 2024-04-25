@@ -4,6 +4,8 @@ namespace TrueDialog
 {
     internal interface IApiCaller
     {
+        void SetSource(string source);
+
         IApiCaller AsUser();
 
         int AccountId { get; set; }

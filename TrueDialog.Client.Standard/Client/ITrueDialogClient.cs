@@ -3,6 +3,8 @@
     public interface ITrueDialogClient
     {
         void SetAccountId(int accountId);
+        
+        void SetSource(string source);
 
         int AccountId { get; }
 
